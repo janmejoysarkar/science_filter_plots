@@ -11,6 +11,7 @@ transmission values.
 import matplotlib.pyplot as plt
 import numpy as np
 import glob
+from scipy.optimize import curve_fit
 
 #### Concatenator takes all the single files for spatial transmission and
 #### combines them into one file.
@@ -26,7 +27,7 @@ def concatenator(save_name, folder):
     bottom= np.loadtxt(glob.glob(folder+ls[4])[0])[:,1]
     
     stack=np.column_stack((wl, center, top, left, right, bottom))
-    np.savetxt(folder+save_name, stack, delimiter=' ', newline='\n')
+    #np.savetxt(folder+save_name, stack, delimiter=' ', newline='\n')
     
 #### Plotter takes a single spatial transmission file and plots it.
    
@@ -43,13 +44,34 @@ def plotter (filter_name, input_data, wl_min, wl_mx):
     plt.xlabel("Wavelength (nm)")
     plt.ylabel("Transmission %")
     plt.grid()
-    plt.savefig("/home/janmejoy/Documents/"+filter_name+"_spatial.png", dpi=300)
+    #plt.savefig("/home/janmejoy/Documents/"+filter_name+"_spatial.png", dpi=300)
     plt.show()
 
 def gauss (x, a, x0, sig):
     return a*np.exp(-(x-x0)**2/2*sig**2)
 
+'''
+
+### Max finder ###
+def gauss_fit (filter_name, input_data, wl_min, wl_mx):
+    data=input_data[np.logical_and(input_data[:,0]>wl_min, input_data[:,0]<wl_mx)]
+    fit1, fit2= curve_fit(gauss, data[:,0], data[:,1], p0=(0.2, ((wl_mx+wl_min)/2), 0.5))
+    print(fit1)
+    y_fit= gauss(data[:,0], *fit1)
+    plt.plot(data[:,0], data[:,1])#, label= "Center")
+    plt.scatter(data[:,0][np.where(data[:,1]==np.max(data[:,1]))], np.max(data[:,1]))
+    print(data[:,0][np.where(data[:,1]==np.max(data[:,1]))])
+    #plt.plot(data[:,0], y_fit)
+    plt.show()
+
 #columns are wl, tx_c, tx_t, tx_l, tx_r, tx_b
+folder="/home/janmejoy/Dropbox/Janmejoy_SUIT_Dropbox/science_filter_characterization/results/filter_data_compiled/"
+
+# NB2A_7 #
+file= folder+ 'NB2A/NB2A_7_QM/trans_profile/NB2A_7_qm_spatial.txt' 
+#plotter("NB2A_7", np.loadtxt(file, skiprows=1), 275, 279)
+gauss_fit("NB2A_7", np.loadtxt(file, skiprows=1), 276.8, 277.2)
+'''
 
 '''
 # NB5_4 #
