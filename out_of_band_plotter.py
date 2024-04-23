@@ -80,7 +80,7 @@ def integrate(tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt):
 
 
 if __name__=='__main__':
-    save_figure=False
+    save_figure=True
     folder= os.path.expanduser('~/Dropbox/Janmejoy_SUIT_Dropbox/science_filter_characterization/science_filter_charactrerization_scripts/science_filter_plots_project/data/processed/')
    
     ## BP2_6 ##
