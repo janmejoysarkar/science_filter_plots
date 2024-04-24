@@ -30,7 +30,7 @@ def tx_gen(oob_blue, oob_red, ib, ib_wl_mn, ib_wl_mx, oob_wl_mn, oob_wl_mx):
     ib=ib[np.logical_and(ib[:,0]>ib_wl_mn, ib[:,0]<ib_wl_mx)]
     return(ib, oob_blue, oob_red)
 
-def fill_interval(tx, fill_range):
+def fill_interval(tx, fill_range, cent=None):
     '''
     picks the center of the tx spectrum and gives intervals within the +- fill range
     
@@ -38,11 +38,12 @@ def fill_interval(tx, fill_range):
     Returns: The array (x and y) that has to be integrated (for net tx measurement) or filled (in plots).
     '''
     if (len(tx)!=0):
-        array=tx[(tx[:,0][int(len(tx)/2)]-fill_range<tx[:,0]) & (tx[:,0]<tx[:,0][int(len(tx)/2)]+fill_range)]
+        if (cent==None): cent= tx[:,0][int(len(tx)/2)]
+        array=tx[(cent-fill_range<tx[:,0]) & (tx[:,0]<cent+fill_range)]
         #the array to be used for integration or shading the plot.
         return(array)
 
-def plotter(ib, oob_blue, oob_red, limit, fill_ib, fill_oob_r, fill_oob_b):  
+def plotter(filt_name, ib, oob_blue, oob_red, limit, fill_ib, fill_oob_r, fill_oob_b):  
     plt.figure(filt_name, figsize=(6,4))
     plt.plot(oob_blue[:,0], oob_blue[:,1], color= '#1f77b4', label="Out of band")
     plt.plot(oob_red[:,0], oob_red[:,1], color= '#1f77b4')
@@ -75,9 +76,9 @@ def integrate(fill_ib, fill_oob_r, fill_oob_b):
         oob_blue_percent= -200
     print(f"{filt_name}\t |oob_b% {round(oob_blue_percent,2)}\t |oob_r% {round(oob_red_percent,2)}")
     
-def wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, oob_limit, fill_range):
-    fill_ib, fill_oob_r, fill_oob_b= fill_interval(tx_ib_plt, fill_range), fill_interval(tx_oob_r_plt, fill_range), fill_interval(tx_oob_b_plt, fill_range)
-    plotter(tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt,oob_limit, fill_ib, fill_oob_r, fill_oob_b)
+def wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, oob_limit, fill_range, cent=None):
+    fill_ib, fill_oob_r, fill_oob_b= fill_interval(tx_ib_plt, fill_range, cent), fill_interval(tx_oob_r_plt, fill_range), fill_interval(tx_oob_b_plt, fill_range) 
+    plotter(filt_name, tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt,oob_limit, fill_ib, fill_oob_r, fill_oob_b)
     integrate(fill_ib, fill_oob_r, fill_oob_b)
 
 
@@ -145,45 +146,46 @@ if __name__=='__main__':
     oob_red=np.loadtxt(folder+'NB1/NB1_2_QM_spatial_oob/trans_profile/Trans_Profile_oob_red_side_NB1_2.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'NB1/NB1_2_QM_spatial_oob/trans_profile/Trans_Profile_center_NB1_2.txt', skiprows=1, usecols=(0,1))
     tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt= tx_gen(oob_blue, oob_red, ib, 205, 230, 190, 400)
-    wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1)
+    wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 5, 214)
     
     ## NB2A_7 ##
     filt_name="NB02A_7"
     oob=np.loadtxt(folder+'NB2A/NB2A_7_QM/trans_profile/Trans_Profile_OOB_NB2_7.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'NB2A/NB2A_7_QM/trans_profile/NB2A_7_qm_spatial.txt', skiprows=1, usecols=(0,1))
     tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt= tx_gen(oob, oob, ib, 275, 279, 255, 400)
-    wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1)
+    wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1, 277)
 
     ## NB3_2 ##
     filt_name="NB03_2"
     oob=np.loadtxt(folder+'NB3/NB3_2_QM/trans_profile/NB3_2_qm_spatial_oob.txt', skiprows=1, usecols= (0,6))
     ib= np.loadtxt(folder+'NB3/NB3_2_QM/trans_profile/NB3_2_qm_spatial_oob.txt', skiprows=1, usecols=(0,1))
     tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt= tx_gen(oob, oob, ib, 278, 282, 255, 400)
-    wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1)
+    wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1, 279.65)
 
     ## NB4_2 ##
+    filt_name="NB04_2"
     oob=np.loadtxt(folder+'NB4/NB4_2_QM/trans_profile/NB4_2_qm_spatial_oob.txt', skiprows=1, usecols= (0,6))
     ib= np.loadtxt(folder+'NB4/NB4_2_QM/trans_profile/NB4_2_qm_spatial_oob.txt', skiprows=1, usecols=(0,1))
     tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt= tx_gen(oob, oob, ib, 278, 283, 250, 400)
-    wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1)
+    wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1, 280.3)
     
     ## NB5_3 ##
     filt_name="NB05_3"
     oob=np.loadtxt(folder+'NB5/NB5_3_QM/trans_profile/Trans_Profile_oob_NB5_3.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'NB5/NB5_3_QM/trans_profile/Trans_Profile_center_NB5_3.txt', skiprows=1, usecols=(0,1))
     tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt= tx_gen(oob, oob, ib, 280, 286, 250, 400)
-    wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1)
+    wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1, 283.35)
 
     ## NB6_1 ##
     filt_name="NB06_1"
     oob=np.loadtxt(folder+'NB6/NB6_1_QM/trans_profile/trans_profile_oob_NB6_1.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'NB6/NB6_1_QM_tilt/trans_profile/Trans_Profile_Qm_tilt_0deg_vaccum_NB6_1.txt', skiprows=1, usecols=(0,1))
     tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt= tx_gen(oob, oob, ib, 296, 303, 255, 400)
-    wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1)
+    wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1, 300)
     
     ## NB7_2 ##
     filt_name="NB07_2"
     oob=np.loadtxt(folder+'NB7/NB7_2_QM/trans_profile/trans_profile_oob_NB7_2.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'NB7/NB7_2_QM_tilt/trans_profile/Trans_Profile_Qm_tilt_0deg_vaccum_NB7_2.txt', skiprows=1, usecols=(0,1))
     tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt= tx_gen(oob, oob, ib, 384, 392, 255, 420)
-    wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1)
+    wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1, 388)
