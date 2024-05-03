@@ -2,7 +2,15 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu May  2 14:34:56 2024
-
+-Created to generate data files for SUIT image analysis.
+-Spatial, OOB and tilt data is processed and %tx is derived.
+-Output is saved as text files.
+-User has to maintain project folder structure.
+-Raw data has to be stored at {PROJECT}/data/raw.
+-User has to enter the folder name containing the ascii files of the raw data.
+-User has to define what data is to be prepped (spatial, tilt, oob).
+-Output will be saved at {PROJECT}/data/processed.
+-Output folder should have {PROJECT}/data/processed/{filter_name}/{spatial,oob,tilt} structure.
 @author: janmejoyarch
 """
 import numpy as np
@@ -44,19 +52,24 @@ def wl_calib(wl, filt):
     wl_corrected= (wl-hrs_calib_dev)+a2v_shift+temp_shift
     return(wl_corrected)
 
-def plot(x,y_ls):
+def plot(x,y_ls, lo=None, hi=None):
     plt.figure()
     for y in y_ls:
-        plt.plot(x,y)
+        plt.plot(x[lo:hi],y[lo:hi]) if lo!=None else plt.plot(x,y)
+                
 
 if __name__=='__main__':
+    #####USER-DEFINED###
     fld= 'NB4_2'
-    typ= 'tilt'
+    typ= 'spatial'
     
     project_path= os.path.expanduser('~/Dropbox/Janmejoy_SUIT_Dropbox/science_filter_characterization/science_filter_charactrerization_scripts/science_filter_plots_project/')
+    ####################
     
     path_list= sorted(glob.glob(os.path.join(project_path+f'data/raw/*/{typ}/*')))
     filter_path= [path for path in path_list if path.endswith(fld)][0]
+    filt_name= filter_path.split('raw/')[1][:4]
+    sav_path= os.path.join(project_path, 'data/processed/', filt_name, typ)
     
     if typ=='spatial':
         dark_flt=avg_normalize(glob.glob(os.path.join(filter_path,'dark_flt*.asc')))
@@ -73,11 +86,9 @@ if __name__=='__main__':
         tx_r= tx_percent(flt_r[1], dark_flt[1], src[1], dark_src[1])
         tx_t= tx_percent(flt_t[1], dark_flt[1], src[1], dark_src[1])
         tx_b= tx_percent(flt_b[1], dark_flt[1], src[1], dark_src[1])
-        wl=wl_calib(src[0], filter_path.split('raw/')[1][:4])
-        
-        #plot(wl_calib(wl), [tx_c, tx_l, tx_r, tx_t, tx_b])
-        plt.plot(wl, tx_c)
-        
+        wl=wl_calib(src[0], filt_name)
+        stack= np.array([wl, tx_c, tx_l, tx_r, tx_t, tx_b]).T
+        np.savetxt(os.path.join(sav_path, f'{fld}_spatial.txt'), stack, header='wl center%tx left%tx right%tx top%tx bottom%tx', fmt= '% 1.5f')
         
     elif typ=='oob':
         dark_oob= avg_normalize(glob.glob(os.path.join(filter_path,'dark_oob*.asc')))
@@ -86,11 +97,25 @@ if __name__=='__main__':
         src= avg_normalize(glob.glob(os.path.join(filter_path,'src*.asc')))
         #Tx percentages
         tx_oob= tx_percent(oob[1], dark_oob[1], src[1], dark_src[1])
-        wl=wl_calib(src[0], filter_path.split('raw/')[1][:4])
+        wl=wl_calib(src[0], filt_name)
         plot(wl, [tx_oob])
+        stack=np.array([wl, tx_oob]).T
+        np.savetxt(os.path.join(sav_path, f'{fld}_oob.txt'), stack, header='wl \t %tx', fmt= '% 1.5f')
 
     elif typ=='tilt':
         dark_src= avg_normalize(glob.glob(os.path.join(filter_path,'drk_src*.asc')))
         src= avg_normalize(glob.glob(os.path.join(filter_path,'src*.asc')))
         dark_flt= avg_normalize(glob.glob(os.path.join(filter_path,'drk_f*.asc')))
+        tilt_tx_ls=[]
+        for tilt in np.arange(-6,7,1):
+            tilt_file_list= glob.glob(os.path.join(filter_path,f'f_{tilt}*.asc'))
+            data= avg_normalize(tilt_file_list)
+            tx= tx_percent(data[1], dark_flt[1], src[1], dark_src[1])
+            tilt_tx_ls.append(tx)
+        wl= wl_calib(src[0], filt_name)
+        tilt_tx_ls.insert(0, wl)
+        stack= np.array(tilt_tx_ls).T #.T makes transpose. To make the data in columns.
+        np.savetxt(os.path.join(sav_path, f'{fld}_tilt.txt'), stack, header='wl -6deg%tx -5deg%tx -4deg%tx -3deg%tx -2deg%tx -1deg%tx 0deg%tx 1deg%tx 2deg%tx 3deg%tx 4deg%tx 5deg tx 6deg%tx', fmt= '% 1.5f')
+        plot(wl, tilt_tx_ls[6:], 1000, 1100)
+        
         
