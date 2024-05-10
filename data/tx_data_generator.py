@@ -60,8 +60,8 @@ def plot(x,y_ls, lo=None, hi=None):
 
 if __name__=='__main__':
     #####USER-DEFINED###
-    fld= 'NB4_2'
-    typ= 'spatial'
+    fld= 'NB2A_7'
+    typ= 'tilt'
     
     project_path= os.path.expanduser('~/Dropbox/Janmejoy_SUIT_Dropbox/science_filter_characterization/science_filter_charactrerization_scripts/science_filter_plots_project/')
     ####################
@@ -89,6 +89,7 @@ if __name__=='__main__':
         wl=wl_calib(src[0], filt_name)
         stack= np.array([wl, tx_c, tx_l, tx_r, tx_t, tx_b]).T
         np.savetxt(os.path.join(sav_path, f'{fld}_spatial.txt'), stack, header='wl center%tx left%tx right%tx top%tx bottom%tx', fmt= '% 1.5f')
+        print('Spatial %tx files generated for ', fld)
         
     elif typ=='oob':
         dark_oob= avg_normalize(glob.glob(os.path.join(filter_path,'dark_oob*.asc')))
@@ -101,6 +102,7 @@ if __name__=='__main__':
         plot(wl, [tx_oob])
         stack=np.array([wl, tx_oob]).T
         np.savetxt(os.path.join(sav_path, f'{fld}_oob.txt'), stack, header='wl \t %tx', fmt= '% 1.5f')
+        print('OOB %tx files generated for ', fld)
 
     elif typ=='tilt':
         dark_src= avg_normalize(glob.glob(os.path.join(filter_path,'drk_src*.asc')))
@@ -116,6 +118,6 @@ if __name__=='__main__':
         tilt_tx_ls.insert(0, wl)
         stack= np.array(tilt_tx_ls).T #.T makes transpose. To make the data in columns.
         np.savetxt(os.path.join(sav_path, f'{fld}_tilt.txt'), stack, header='wl -6deg%tx -5deg%tx -4deg%tx -3deg%tx -2deg%tx -1deg%tx 0deg%tx 1deg%tx 2deg%tx 3deg%tx 4deg%tx 5deg tx 6deg%tx', fmt= '% 1.5f')
-        plot(wl, tilt_tx_ls[6:], 1000, 1100)
-        
+        print('Tilt %tx files generated for ', fld)
+
         
