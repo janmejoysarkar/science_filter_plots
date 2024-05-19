@@ -7,6 +7,8 @@ The data should be air-to-vacuum shift corrected and should give absolute
 transmission values.
 
 2023-12-27: Function added to measure deviation of spatial transmission spectra.
+2023-05-20: Multiplotter function added. Used on newly generated data. Code rewritten
+to make it compatible with newly generated data by JJ.
 @author: janmejoy
 """
 import matplotlib.pyplot as plt
@@ -14,8 +16,8 @@ import numpy as np
 from scipy.interpolate import interp1d
 import os
    
-def plotter (filter_name, input_data, wl_min, wl_mx, save_plot=None):
-    data=input_data[np.logical_and(input_data[:,0]>wl_min, input_data[:,0]<wl_mx)]
+def plotter (filter_name, input_data, wl_mn, wl_mx, save_plot=None):
+    data=input_data[np.logical_and(input_data[:,0]>wl_mn, input_data[:,0]<wl_mx)]
     plt.figure(filter_name, figsize=(6,4))
     plt.plot(data[:,0], data[:,1], color= '#1f77b4')#, label= "Center")
     plt.plot(data[:,0], data[:,2], color='#ff7f0e')#, label= "Top")
@@ -23,11 +25,32 @@ def plotter (filter_name, input_data, wl_min, wl_mx, save_plot=None):
     plt.plot(data[:,0], data[:,4], color='#d62728')#, label= "Right")
     plt.plot(data[:,0], data[:,5], color='#9467bd')#, label= "Bottom")
     plt.title("Spatial transmission- "+filter_name)
-    plt.legend(["Center", "Top", "Left", "Right", "Bottom"])
+    plt.legend(["Center", "Left", "Right", "Top", "Bottom"])
     plt.xlabel("Wavelength (nm)")
     plt.ylabel("Transmission %")
     plt.grid()
-    if save_plot==True: plt.savefig("/home/janmejoy/Documents/"+filter_name+"_spatial.png", dpi=300)
+    if save_plot==True: plt.savefig(os.path.join(folder,f'products/spatial/{filter_name}_spatial.pdf'), dpi=300)
+    plt.show()
+
+def multiplotter (filter_name, input_data_ls, wl_mn_ls, wl_mx_ls, save_plot=None):
+    #For plots requiring multiple inputs to be concatenated for plotting.
+    data= input_data_ls[0]
+    if (len(input_data_ls) > 1):
+        for i in range(1, len(input_data_ls)):
+            data_interim=input_data_ls[i][np.logical_and(input_data_ls[i][:,0]>wl_mn_ls[i], input_data_ls[i][:,0]<wl_mx_ls[i])]
+            data= np.concatenate((data, data_interim))
+    plt.figure(filter_name, figsize=(6,4))
+    plt.plot(data[:,0], data[:,1], color= '#1f77b4')#, label= "Center")
+    plt.plot(data[:,0], data[:,2], color='#ff7f0e')#, label= "Top")
+    plt.plot(data[:,0], data[:,3], color='#2ca02c')#, label= "Left")
+    plt.plot(data[:,0], data[:,4], color='#d62728')#, label= "Right")
+    plt.plot(data[:,0], data[:,5], color='#9467bd')#, label= "Bottom")
+    plt.title("Spatial transmission- "+filter_name)
+    plt.legend(["Center", "Left", "Right", "Top", "Bottom"])
+    plt.xlabel("Wavelength (nm)")
+    plt.ylabel("Transmission %")
+    plt.grid()
+    if save_plot==True: plt.savefig(os.path.join(folder,f'products/spatial/{filter_name}_spatial.pdf'), dpi=300)
     plt.show()
 
 def deviation(filter_name, input_data, wl_min, wl_mx):
@@ -72,97 +95,123 @@ def deviation(filter_name, input_data, wl_min, wl_mx):
 if __name__=='__main__':
     
     ### Plotting & deviation analysis ###
-        
     folder=os.path.expanduser('~/Dropbox/Janmejoy_SUIT_Dropbox/science_filter_characterization/science_filter_charactrerization_scripts/science_filter_plots_project/')
-    
     # NB2A_7 #
     ftr_name= "NB02"
-    file= f'{folder}data/processed/NB02/spatial/NB2A_7_spatial.txt' 
+    file= f'{folder}data/processed/{ftr_name}/spatial/NB2A_7_spatial.txt' 
     wl_mn, wl_mx= 275, 279
     plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=True)
     deviation(ftr_name, np.loadtxt(file, skiprows=1),  wl_mn, wl_mx)
-    '''
+    
     # NB3_3 #
-    file= folder+'NB3/NB3_3_FM/trans_profile/NB3_3_fm_spatial.txt'
-    plotter("NB3_3", np.loadtxt(file, skiprows=1), 278.5, 281.5)
-    deviation("NB3_3", np.loadtxt(file, skiprows=1), 278.5, 281.5)
+    ftr_name= "NB03"
+    file= f'{folder}data/processed/{ftr_name}/spatial/NB3_3_spatial.txt' 
+    wl_mn, wl_mx= 278.5, 281.5
+    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=True)
+    deviation(ftr_name, np.loadtxt(file, skiprows=1),  wl_mn, wl_mx)
     
     # NB4_2 #
-    file= folder+ 'NB4/NB4_2_QM/trans_profile/NB4_2_qm_spatial_oob.txt'
-    plotter("NB4_2", np.loadtxt(file, skiprows=1), 278.5, 283)
-    deviation("NB4_2", np.loadtxt(file, skiprows=1), 278.5, 283)
+    ftr_name= "NB04"
+    file= f'{folder}data/processed/{ftr_name}/spatial/NB4_2_spatial.txt' 
+    wl_mn, wl_mx= 278.5, 283
+    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=True)
+    deviation(ftr_name, np.loadtxt(file, skiprows=1),  wl_mn, wl_mx)
     
     # NB5_4 #
-    file= folder+'NB5/NB5_4_FM_spatial/trans_profile/NB5_4_fm_spatial.txt'
-    plotter("NB5_4", np.loadtxt(file, skiprows=1), 280.5, 286)
-    deviation("NB5_4", np.loadtxt(file, skiprows=1), 280.5, 286)
+    ftr_name= "NB05"
+    file= f'{folder}data/processed/{ftr_name}/spatial/NB5_4_1200lpmm_500blaze_spatial.txt' 
+    wl_mn, wl_mx= 280.5, 286
+    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=True)
+    deviation(ftr_name, np.loadtxt(file, skiprows=1),  wl_mn, wl_mx)
     
     # NB6_3 #
-    file= folder+ 'NB6/NB6_3_spatial_FM/trans_profile/NB6_3_fm_spatial.txt'
-    plotter("NB6_3", np.loadtxt(file, skiprows=1), 296, 304)
-    deviation("NB6_3", np.loadtxt(file, skiprows=1), 296, 304)
+    ftr_name= "NB06"
+    file= f'{folder}data/processed/{ftr_name}/spatial/NB6_3_spatial.txt' 
+    wl_mn, wl_mx= 296, 304
+    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=True)
+    deviation(ftr_name, np.loadtxt(file, skiprows=1),  wl_mn, wl_mx)
     
     # NB7_1 #
-    file= folder+ 'NB7/NB7_1_FM/trans_profile/NB7_1_fm_spatial.txt'
-    plotter("NB7_1", np.loadtxt(file, skiprows=1), 385, 391)
-    deviation("NB7_1", np.loadtxt(file, skiprows=1), 385, 391)
+    ftr_name= "NB07"
+    file= f'{folder}data/processed/{ftr_name}/spatial/NB7_1_spatial.txt' 
+    wl_mn, wl_mx= 385, 391
+    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=True)
+    deviation(ftr_name, np.loadtxt(file, skiprows=1),  wl_mn, wl_mx)
     
     # NB8_1 #
-    file= folder+ 'NB8/NB8_1_spatial/trans_profile/NB8_1_qm_spatial_oob.txt'
-    plotter("NB8_1", np.loadtxt(file, skiprows=1), 396.25, 397.25)
-    deviation("NB8_1", np.loadtxt(file, skiprows=1), 396.25, 397.25)
+    ftr_name= "NB08"
+    file= f'{folder}data/processed/{ftr_name}/spatial/NB8_1_spatial.txt' 
+    wl_mn, wl_mx= 396.4, 397.3
+    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=True)
+    deviation(ftr_name, np.loadtxt(file, skiprows=1),  wl_mn, wl_mx)
     
     # NB8_2 #
-    file= folder+ 'NB8/NB8_2_FM_spatial/trans_profile/NB8_2_fm_spatial.txt'
-    plotter("NB8_2", np.loadtxt(file, skiprows=1), 396.25, 397.25)
-    deviation("NB8_2", np.loadtxt(file, skiprows=1), 396.25, 397.25)
+    ftr_name= "NB08"
+    file= f'{folder}data/processed/{ftr_name}/spatial/NB8_2_1200lpmm_500blaze_spatial.txt' 
+    wl_mn, wl_mx= 396.4, 397.3
+    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=True)
+    deviation(ftr_name, np.loadtxt(file, skiprows=1),  wl_mn, wl_mx)
     
     # BB1_5 #
-    file= folder+'BB1/BB1_5_QM/trans_profile/BB1_5_fm_spatial.txt'
-    plotter("BB1_5", np.loadtxt(file, skiprows=1), 100, 400)
+    ftr_name= "BB01"
+    file= f'{folder}data/processed/{ftr_name}/spatial/BB1_5_inband_spatial.txt' 
+    wl_mn, wl_mx= 100, 400
+    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=True)
     
     # BB1_3 #
-    file= folder+'BB1/BB1_3_FM/trans_profile/BB1_3_fm_spatial.txt'
-    plotter("BB1_3", np.loadtxt(file, skiprows=1), 100, 400)
+    ftr_name= "BB01"
+    file= f'{folder}data/processed/{ftr_name}/spatial/BB1_3_spatial_spatial.txt' 
+    wl_mn, wl_mx= 100, 400
+    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=True)
     
     # BB3_3 #
-    file= folder+"BB3/BB3_3_FM_spatial_OOB/trans_profile/spatial/BB3_3_fm_spatial.txt"
-    plotter("BB3_3", np.loadtxt(file, skiprows=1), 100, 400)
-    
-    # BP2_8 #
-    file= folder+"BP2/BP2_8_Qm/trans_profile/BP2_8_qm_spatial.txt"
-    plotter("BP2_8", np.loadtxt(file, skiprows=1), 265, 295)
-    
-    # BP3_2 #
-    file= folder+"BP3/BP3_2_FM_Spatial_OOB/trans_profile/spatial_310/BP3_2_fm_spatial_310.txt"
-    plotter("BP3_2", np.loadtxt(file, skiprows=1), 200, 400)
-    
-    file= folder+"BP3/BP3_2_FM_Spatial_OOB/trans_profile/spatial_350/BP3_2_fm_spatial_350.txt"
-    plotter("BP3_2", np.loadtxt(file, skiprows=1), 200, 400)
-    
-    file= folder+"BP3/BP3_2_FM_Spatial_OOB/trans_profile/spatial_390/BP3_2_fm_spatial_390.txt"
-    plotter("BP3_2", np.loadtxt(file, skiprows=1), 200, 500)
-    
-    # BP4_4 #
-    file= folder+"BP4/BP4_4_FM_spatial/trans_profile/spatial_270/BP4_4_fm_spatial_270.txt"
-    plotter("BP4_4", np.loadtxt(file, skiprows=1), 200, 400)
-    
-    file= folder+"BP4/BP4_4_FM_spatial/trans_profile/spatial_310/BP4_4_fm_spatial_310.txt"
-    plotter("BP4_4", np.loadtxt(file, skiprows=1), 200, 400)
-    
-    file= folder+"BP4/BP4_4_FM_spatial/trans_profile/spatial_350/BP4_4_fm_spatial_350.txt"
-    plotter("BP4_4", np.loadtxt(file, skiprows=1), 200, 500)
+    ftr_name= "BB03"
+    file= f'{folder}data/processed/{ftr_name}/spatial/BB3_3_spatial_spatial.txt' 
+    wl_mn, wl_mx= 100, 400
+    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=True)
     
     # NB1_1 #
-    file= folder+"NB1/NB1_1_FM_spatial/trans_profile/NB1_1_spatial_214/NB1_1_fm_spatial_214.txt"
-    plotter("NB1_1", np.loadtxt(file, skiprows=1), 180, 400)
-    
-    file= folder+"NB1/NB1_1_FM_spatial/trans_profile/NB1_1_spatial_254/NB1_1_fm_spatial_254.txt"
-    plotter("NB1_1", np.loadtxt(file, skiprows=1), 180, 400)
-    
+    ftr_name= "NB01"
+    file1= f'{folder}data/processed/{ftr_name}/spatial/NB1_1_spatial_214_spatial.txt' 
+    wl_mn1, wl_mx1= 180, 400
+    file2= f'{folder}data/processed/{ftr_name}/spatial/NB1_1_spatial_254_spatial.txt' 
+    wl_mn2, wl_mx2= 180, 400
+    multiplotter (ftr_name, [np.loadtxt(file1, skiprows=1), np.loadtxt(file2, skiprows=1)], [wl_mn1, wl_mn2], [wl_mx1, wl_mx2], save_plot=True)
+
     # BB2_3 #
-    file= folder+"BB2/BB2_3_FM_spatial_OOB/trans_profile/spatial_255/BB2_3_fm_spatial_255.txt"
-    plotter("BB2_3", np.loadtxt(file, skiprows=1), 200, 400)
-    file= folder+"BB2/BB2_3_FM_spatial_OOB/trans_profile/spatial_290/BB2_3_fm_spatial_290.txt"
-    plotter("BB2_3", np.loadtxt(file, skiprows=1), 276, 400)
-    '''
+    ftr_name= "BB02"
+    file1= f'{folder}data/processed/{ftr_name}/spatial/BB2_3_spatial_255nm_spatial.txt' 
+    wl_mn1, wl_mx1= 200, 400
+    file2= f'{folder}data/processed/{ftr_name}/spatial/BB2_3_spatial_290nm_spatial.txt' 
+    wl_mn2, wl_mx2=  276, 400
+    multiplotter (ftr_name, [np.loadtxt(file1, skiprows=1), np.loadtxt(file2, skiprows=1)], [wl_mn1, wl_mn2], [wl_mx1, wl_mx2], save_plot=True)
+    
+    # BP2_8 #
+    ftr_name= "BP02"
+    file1= f'{folder}data/processed/{ftr_name}/spatial/BP2_8_262-282_spatial.txt' 
+    wl_mn1, wl_mx1= 265, 275
+    file2= f'{folder}data/processed/{ftr_name}/spatial/BP2_8_278-297_spatial.txt' 
+    wl_mn2, wl_mx2= 282, 295
+    multiplotter (ftr_name, [np.loadtxt(file1, skiprows=1), np.loadtxt(file2, skiprows=1)], [wl_mn1, wl_mn2], [wl_mx1, wl_mx2], save_plot=True)
+
+    # BP3_2 #
+    ftr_name= "BP03"
+    file1= f'{folder}data/processed/{ftr_name}/spatial/BP3_2_spatial_310_spatial.txt' 
+    wl_mn1, wl_mx1= 200, 400
+    file2= f'{folder}data/processed/{ftr_name}/spatial/BP3_2_spatial_350_spatial.txt' 
+    wl_mn2, wl_mx2= 200, 400
+    file3= f'{folder}data/processed/{ftr_name}/spatial/BP3_2_spatial_390_spatial.txt'
+    wl_mn3, wl_mx3= 200, 500
+    multiplotter (ftr_name, [np.loadtxt(file1, skiprows=1), np.loadtxt(file2, skiprows=1), np.loadtxt(file3, skiprows=1)], 
+                  [wl_mn1, wl_mn2, wl_mn3], [wl_mx1, wl_mx2, wl_mx3], save_plot=True)
+
+    # BP4_4 #
+    ftr_name= "BP04"
+    file1= f'{folder}data/processed/{ftr_name}/spatial/BP4_4_spatial_270_spatial.txt' 
+    wl_mn1, wl_mx1= 200, 400
+    file2= f'{folder}data/processed/{ftr_name}/spatial/BP4_4_spatial_310_spatial.txt' 
+    wl_mn2, wl_mx2= 200, 400
+    file3= f'{folder}data/processed/{ftr_name}/spatial/BP4_4_spatial_350_spatial.txt'
+    wl_mn3, wl_mx3= 200, 500
+    multiplotter (ftr_name, [np.loadtxt(file1, skiprows=1), np.loadtxt(file2, skiprows=1), np.loadtxt(file3, skiprows=1)], 
+                  [wl_mn1, wl_mn2, wl_mn3], [wl_mx1, wl_mx2, wl_mx3], save_plot=True)

@@ -60,8 +60,8 @@ def plot(x,y_ls, lo=None, hi=None):
 
 if __name__=='__main__':
     #####USER-DEFINED###
-    fld= 'NB2A_7'
-    typ= 'tilt'
+    fld= 'BP4_4_spatial_350' #folder name for raw data
+    typ= 'spatial' #type of data
     
     project_path= os.path.expanduser('~/Dropbox/Janmejoy_SUIT_Dropbox/science_filter_characterization/science_filter_charactrerization_scripts/science_filter_plots_project/')
     ####################
