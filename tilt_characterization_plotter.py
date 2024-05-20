@@ -34,8 +34,8 @@ if __name__=='__main__':
     
     ### NB1_2_QM_tilt ###
     filter_name= 'NB01' #CHECK
-    wl_min, wl_max, cwl= 200, 240, 240
-    file= f'{project_path}data/processed/{filter_name}/tilt/NB1_1_tilt.txt'
+    wl_min, wl_max, cwl= 200, 240, 214
+    file= f'{project_path}data/processed/{filter_name}/tilt/NB1_2_tilt.txt'
     tilt_plotter(file, wl_min, wl_max, cwl, filter_name)
     
     ### NB2A_7_QM_tilt ###
