@@ -1,0 +1,89 @@
+Generated on 2024-05-19
+
+XXXXXX NB02 XXXXXX
+Pos 	 Max_tx_wl 	 FWHM(nm)
+center 	 276.852 	 0.406
+top 	 276.885 	 0.406
+left 	 276.875 	 0.413
+right 	 276.908 	 0.41
+bottom 	 276.844 	 0.406
+tx_mx-- Mean, Std, %dev: 19.44 0.12 0.6
+mx_wl-- Mean, Std, %dev: 276.87 0.02 0.01
+fwhm-- Mean, Std, %dev: 0.41 0.0 0.7
+
+XXXXXX NB03 XXXXXX
+Pos 	 Max_tx_wl 	 FWHM(nm)
+center 	 280.037 	 0.43
+top 	 280.038 	 0.44
+left 	 280.014 	 0.438
+right 	 280.024 	 0.439
+bottom 	 280.031 	 0.437
+tx_mx-- Mean, Std, %dev: 22.72 0.55 2.43
+mx_wl-- Mean, Std, %dev: 280.03 0.01 0.0
+fwhm-- Mean, Std, %dev: 0.44 0.0 0.81
+
+XXXXXX NB04 XXXXXX
+Pos 	 Max_tx_wl 	 FWHM(nm)
+center 	 280.77 	 0.422
+top 	 280.755 	 0.433
+left 	 280.776 	 0.446
+right 	 280.766 	 0.442
+bottom 	 280.754 	 0.438
+tx_mx-- Mean, Std, %dev: 25.86 1.12 4.32
+mx_wl-- Mean, Std, %dev: 280.76 0.01 0.0
+fwhm-- Mean, Std, %dev: 0.44 0.01 1.9
+
+XXXXXX NB05 XXXXXX
+Pos 	 Max_tx_wl 	 FWHM(nm)
+center 	 283.421 	 0.425
+top 	 283.378 	 0.438
+left 	 283.415 	 0.435
+right 	 283.416 	 0.436
+bottom 	 283.375 	 0.436
+tx_mx-- Mean, Std, %dev: 23.62 0.7 2.97
+mx_wl-- Mean, Std, %dev: 283.4 0.02 0.01
+fwhm-- Mean, Std, %dev: 0.43 0.0 1.06
+
+XXXXXX NB06 XXXXXX
+Pos 	 Max_tx_wl 	 FWHM(nm)
+center 	 300.183 	 1.036
+top 	 300.05 	 1.033
+left 	 300.229 	 1.05
+right 	 300.228 	 1.046
+bottom 	 300.124 	 1.042
+tx_mx-- Mean, Std, %dev: 32.24 0.09 0.27
+mx_wl-- Mean, Std, %dev: 300.16 0.07 0.02
+fwhm-- Mean, Std, %dev: 1.04 0.01 0.6
+
+XXXXXX NB07 XXXXXX
+Pos 	 Max_tx_wl 	 FWHM(nm)
+center 	 388.41 	 1.042
+top 	 388.472 	 0.967
+left 	 388.322 	 0.961
+right 	 388.458 	 1.05
+bottom 	 388.381 	 1.033
+tx_mx-- Mean, Std, %dev: 31.89 0.82 2.58
+mx_wl-- Mean, Std, %dev: 388.41 0.05 0.01
+fwhm-- Mean, Std, %dev: 1.01 0.04 3.81
+
+XXXXXX NB08 XXXXXX
+Pos 	 Max_tx_wl 	 FWHM(nm)
+center 	 397.009 	 0.115
+top 	 396.961 	 0.116
+left 	 396.97 	 0.114
+right 	 396.968 	 0.114
+bottom 	 396.957 	 0.118
+tx_mx-- Mean, Std, %dev: 16.1 0.56 3.49
+mx_wl-- Mean, Std, %dev: 396.97 0.02 0.0
+fwhm-- Mean, Std, %dev: 0.12 0.0 1.3
+
+XXXXXX NB08 XXXXXX
+Pos 	 Max_tx_wl 	 FWHM(nm)
+center 	 396.883 	 0.124
+top 	 396.848 	 0.123
+left 	 396.867 	 0.13
+right 	 396.829 	 0.13
+bottom 	 396.883 	 0.124
+tx_mx-- Mean, Std, %dev: 14.28 0.86 6.05
+mx_wl-- Mean, Std, %dev: 396.86 0.02 0.01
+fwhm-- Mean, Std, %dev: 0.13 0.0 2.48
