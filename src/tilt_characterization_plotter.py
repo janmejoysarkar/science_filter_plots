@@ -38,9 +38,8 @@ if __name__=='__main__':
     filter_name= 'NB03'
     file= f'{project_path}data/processed/{filter_name}/tilt/NB3_2_tilt.txt'
     wl_min, wl_max, cwl= 278.5, 281.5, 279.6
-    tilt_plotter(file, wl_min, wl_max, cwl, filter_name, saveplot=False)
-    
-    '''
+    tilt_plotter(file, wl_min, wl_max, cwl, filter_name, saveplot=True)
+
     ### NB1_2_QM_tilt ###
     filter_name= 'NB01' #CHECK
     wl_min, wl_max, cwl= 200, 240, 214
@@ -76,4 +75,3 @@ if __name__=='__main__':
     file= f'{project_path}data/processed/{filter_name}/tilt/NB7_2_tilt.txt'
     wl_min, wl_max, cwl= 385, 391, 388
     tilt_plotter(file, wl_min, wl_max, cwl, filter_name, saveplot=True)
-    '''

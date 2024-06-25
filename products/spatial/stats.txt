@@ -1,15 +1,15 @@
-Generated on 2024-05-19
+Generated on 2024-06-25
 
 XXXXXX NB02 XXXXXX
 Pos 	 Max_tx_wl 	 FWHM(nm)
-center 	 276.852 	 0.406
-top 	 276.885 	 0.406
-left 	 276.875 	 0.413
-right 	 276.908 	 0.41
-bottom 	 276.844 	 0.406
+center 	 277.028 	 0.405
+top 	 277.061 	 0.406
+left 	 277.052 	 0.413
+right 	 277.084 	 0.409
+bottom 	 277.02 	 0.406
 tx_mx-- Mean, Std, %dev: 19.44 0.12 0.6
-mx_wl-- Mean, Std, %dev: 276.87 0.02 0.01
-fwhm-- Mean, Std, %dev: 0.41 0.0 0.7
+mx_wl-- Mean, Std, %dev: 277.05 0.02 0.01
+fwhm-- Mean, Std, %dev: 0.41 0.0 0.72
 
 XXXXXX NB03 XXXXXX
 Pos 	 Max_tx_wl 	 FWHM(nm)
@@ -35,14 +35,14 @@ fwhm-- Mean, Std, %dev: 0.44 0.01 1.9
 
 XXXXXX NB05 XXXXXX
 Pos 	 Max_tx_wl 	 FWHM(nm)
-center 	 283.421 	 0.425
-top 	 283.378 	 0.438
-left 	 283.415 	 0.435
-right 	 283.416 	 0.436
-bottom 	 283.375 	 0.436
+center 	 283.591 	 0.425
+top 	 283.547 	 0.437
+left 	 283.585 	 0.434
+right 	 283.586 	 0.435
+bottom 	 283.544 	 0.436
 tx_mx-- Mean, Std, %dev: 23.62 0.7 2.97
-mx_wl-- Mean, Std, %dev: 283.4 0.02 0.01
-fwhm-- Mean, Std, %dev: 0.43 0.0 1.06
+mx_wl-- Mean, Std, %dev: 283.57 0.02 0.01
+fwhm-- Mean, Std, %dev: 0.43 0.0 1.0
 
 XXXXXX NB06 XXXXXX
 Pos 	 Max_tx_wl 	 FWHM(nm)
@@ -79,11 +79,11 @@ fwhm-- Mean, Std, %dev: 0.12 0.0 1.3
 
 XXXXXX NB08 XXXXXX
 Pos 	 Max_tx_wl 	 FWHM(nm)
-center 	 396.883 	 0.124
-top 	 396.848 	 0.123
-left 	 396.867 	 0.13
-right 	 396.829 	 0.13
-bottom 	 396.883 	 0.124
+center 	 396.927 	 0.124
+top 	 396.893 	 0.123
+left 	 396.911 	 0.129
+right 	 396.873 	 0.13
+bottom 	 396.927 	 0.124
 tx_mx-- Mean, Std, %dev: 14.28 0.86 6.05
-mx_wl-- Mean, Std, %dev: 396.86 0.02 0.01
-fwhm-- Mean, Std, %dev: 0.13 0.0 2.48
+mx_wl-- Mean, Std, %dev: 396.91 0.02 0.01
+fwhm-- Mean, Std, %dev: 0.13 0.0 2.3
