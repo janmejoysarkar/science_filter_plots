@@ -16,10 +16,12 @@ def tilt_plotter(file, wl_min, wl_max, target, filter_name, saveplot=None):
     data=np.loadtxt(file, skiprows=1)
     plot_data=data[np.logical_and(data[:,0]>wl_min, data[:,0]<wl_max)] #selects the requisite wavelength
     plt.figure(figsize=(6,4))
-    for i in range(7,13):
-        plt.plot(plot_data[:,0], plot_data[:,i])
-    plt.axvline(target, color='black')
-    plt.legend(["0°", "1°", "2°", "3°", "4°", "5°", "6°", 'Central λ'])
+    angle=0
+    for i in range(7,14):
+        plt.plot(plot_data[:,0], plot_data[:,i], label=f"{angle}°")
+        angle+=1
+    plt.axvline(target, color='black', label= 'Central λ')
+    plt.legend()
     plt.xlabel('Wavelength (nm)')
     plt.ylabel('% Transmission')
     plt.title(filter_name+'_tilt | λ= '+str(target))
@@ -32,22 +34,23 @@ if __name__=='__main__':
     #global common path to the data
     project_path= os.path.expanduser('~/Dropbox/Janmejoy_SUIT_Dropbox/science_filter_characterization/science_filter_charactrerization_scripts/science_filter_plots_project/')
     
+    ### NB3_2_QM_tilt ###
+    filter_name= 'NB03'
+    file= f'{project_path}data/processed/{filter_name}/tilt/NB3_2_tilt.txt'
+    wl_min, wl_max, cwl= 278.5, 281.5, 279.6
+    tilt_plotter(file, wl_min, wl_max, cwl, filter_name, saveplot=False)
+    
+    '''
     ### NB1_2_QM_tilt ###
     filter_name= 'NB01' #CHECK
     wl_min, wl_max, cwl= 200, 240, 214
     file= f'{project_path}data/processed/{filter_name}/tilt/NB1_2_tilt.txt'
-    tilt_plotter(file, wl_min, wl_max, cwl, filter_name)
+    tilt_plotter(file, wl_min, wl_max, cwl, filter_name, saveplot=True)
     
     ### NB2A_7_QM_tilt ###
     filter_name= 'NB02'
     file= f'{project_path}data/processed/{filter_name}/tilt/NB2A_7_tilt.txt'
     wl_min, wl_max, cwl= 275, 279, 276.6
-    tilt_plotter(file, wl_min, wl_max, cwl, filter_name, saveplot=True)
-    
-    ### NB3_2_QM_tilt ###
-    filter_name= 'NB03'
-    file= f'{project_path}data/processed/{filter_name}/tilt/NB3_2_tilt.txt'
-    wl_min, wl_max, cwl= 278.5, 281.5, 279.6
     tilt_plotter(file, wl_min, wl_max, cwl, filter_name, saveplot=True)
     
     ### NB4_2_QM_tilt ###
@@ -73,3 +76,4 @@ if __name__=='__main__':
     file= f'{project_path}data/processed/{filter_name}/tilt/NB7_2_tilt.txt'
     wl_min, wl_max, cwl= 385, 391, 388
     tilt_plotter(file, wl_min, wl_max, cwl, filter_name, saveplot=True)
+    '''

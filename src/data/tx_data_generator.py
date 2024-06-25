@@ -53,7 +53,7 @@ def wl_calib(wvlen, filt):
     temp_pm=np.array([0.88*25, 1.95*25, 2.2*24, 1.95*25, 2.45*25, 2.17*25, 3*25, 
              1.9*24, 2.0*25, 2.0*25, 2.0*25, 2.1*24, 2.7*24, 2.8*25])*10**-3
     a, b, c= -8.21e-7, 9.96e-5, 1.51e-1
-    hrs_calib_dev= (a*wvlen**2)+(b*wvlen)+c
+    hrs_calib_dev= (a*wvlen**2)+(b*wvlen)+c 
     a2v_shift= air_to_vac_list[filt_list.index(filt)]
     temp_shift= temp_pm[filt_list.index(filt)]
     wl_corrected= (wvlen-hrs_calib_dev)+a2v_shift+temp_shift
@@ -142,3 +142,5 @@ if __name__=='__main__':
         print('Tilt %tx files generated for ', FLD)
 
         
+
+
