@@ -1,4 +1,5 @@
-OOB stats. Generated on 2024-06-26
+Generated on 2024-06-26
+OOB %tx wrt IB.
 
 NB01_2	 |oob_b% 2.29	 |oob_r% 5.46
 BB03_3	 |oob_b% 0.11	 |oob_r% 0.31
@@ -13,5 +14,3 @@ NB05_3	 |oob_b% 0.03	 |oob_r% 0.01
 NB04_2	 |oob_b% 0.03	 |oob_r% 0.03
 NB03_2	 |oob_b% 0.03	 |oob_r% 0.04
 NB02A_7	 |oob_b% 0.03	 |oob_r% 0.01
-
-

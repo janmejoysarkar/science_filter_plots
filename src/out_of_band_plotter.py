@@ -30,21 +30,6 @@ def tx_gen(oob_blue, oob_red, ib, ib_wl_mn, ib_wl_mx, oob_wl_mn, oob_wl_mx):
     ib=ib[np.logical_and(ib[:,0]>ib_wl_mn, ib[:,0]<ib_wl_mx)]
     return(ib, oob_blue, oob_red)
 
-def fill_interval(tx, fill_range, cent=None):
-    '''
-    picks the center of the tx spectrum and gives intervals within the +- fill range
-    
-    Input: tx: np array. 2 col. wl and tx; fill_range: +- 
-    of this value will be filled.
-    Returns: The array (x and y) that has to be integrated 
-    (for net tx measurement) or filled (in plots).
-    '''
-    if len(tx)!=0:
-        if cent==None: cent= tx[:,0][int(len(tx)/2)]
-        array=tx[(cent-fill_range<tx[:,0]) & (tx[:,0]<cent+fill_range)]
-        #the array to be used for integration or shading the plot.
-        return array
-
 def plotter(filt_name, ib, oob_blue, oob_red, limit, fill_ib, fill_oob_r, fill_oob_b):  
     plt.figure(filt_name, figsize=(6,4))
     plt.plot(oob_blue[:,0], oob_blue[:,1], color= '#1f77b4', label="Out of band")
@@ -65,6 +50,21 @@ def plotter(filt_name, ib, oob_blue, oob_red, limit, fill_ib, fill_oob_r, fill_o
     sav= os.path.expanduser('~/Dropbox/Janmejoy_SUIT_Dropbox/science_filter_characterization/science_filter_charactrerization_scripts/science_filter_plots_project/products/out_of_band/')
     if (save_figure == True): plt.savefig(sav+filt_name+"_out_of_band.pdf", dpi=300)
     plt.show()
+    
+def fill_interval(tx, fill_range, cent=None):
+    '''
+    picks the center of the tx spectrum and gives intervals within the +- fill range
+    
+    Input: tx: np array. 2 col. wl and tx; fill_range: +- 
+    of this value will be filled.
+    Returns: The array (x and y) that has to be integrated 
+    (for net tx measurement) or filled (in plots).
+    '''
+    if len(tx)!=0:
+        if cent==None: cent= tx[:,0][int(len(tx)/2)] #cent= tx[:,0][np.where (tx[:,1]==np.max(tx[:,1]))]
+        array=tx[(cent-fill_range<tx[:,0]) & (tx[:,0]<cent+fill_range)]
+        #the array to be used for integration or shading the plot.
+        return array
 
 def integrate(fill_ib, fill_oob_r, fill_oob_b):
     ib_integrate= simpson(fill_ib[:,1], fill_ib[:,0])
@@ -177,21 +177,21 @@ if __name__=='__main__':
     oob=np.loadtxt(folder+'NB05/oob/NB5_3_oob.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'NB05/oob/NB5_3_inband.txt', skiprows=1, usecols=(0,1))
     tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt= tx_gen(oob, oob, ib, 280, 286, 250, 400)
-    wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1, 283.35)
+    wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1, 283.54)
 
     ## NB4_2 ##
     filt_name="NB04_2"
     oob=np.loadtxt(folder+'NB04/oob/NB4_2_oob.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'NB04/oob/NB4_2_inband.txt', skiprows=1, usecols=(0,1))
     tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt= tx_gen(oob, oob, ib, 278, 283, 250, 400)
-    wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1, 280.3)
+    wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1, 280.75)
 
     ## NB3_2 ##
     filt_name="NB03_2"
     oob=np.loadtxt(folder+'NB03/oob/NB3_2_oob.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'NB03/oob/NB3_2_inband.txt', skiprows=1, usecols=(0,1))
     tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt= tx_gen(oob, oob, ib, 278, 282, 255, 400)
-    wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1, 279.65)
+    wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1, 280.05)
 
     ## NB2A_7 ##
     filt_name="NB02A_7"
