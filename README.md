@@ -6,7 +6,7 @@ Repository maintained to create SUIT science filter transmission profiles from a
 Data recorded at SAG-ISITE with Andor Shamrock 500i spectrograph.
 
 
-# Release Notes:
+## Release Notes:
 - NB2A_7 tilt data did not have -3 degree fitler measurement. A dark data has been copied as f_-3deg_{1..3}.asc to be used as placeholders.
 - 2024-06-27: Temperature shift has been made to 0. Filter usage temperature and measurement temperature are the same (21 deg C). Delta T is 0.
 
