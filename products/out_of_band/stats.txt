@@ -1,10 +1,9 @@
-Generated on 2024-06-26
+Generated on 2024-06-27
 OOB %tx wrt IB.
-
-NB01_2	 |oob_b% 2.29	 |oob_r% 5.46
+NB01_2	 |oob_b% 2.32	 |oob_r% 5.44
 BB03_3	 |oob_b% 0.11	 |oob_r% 0.31
 BB02_3	 |oob_b% 0.86	 |oob_r% 0.05
-BB01_3	 |oob_b% 13.3	 |oob_r% 0.34
+BB01_3	 |oob_b% 13.36	 |oob_r% 0.34
 BP02_6	 |oob_b% 0.09	 |oob_r% 0.03
 BP04_2	 |oob_b% -200	 |oob_r% 0.16
 BP03_2	 |oob_b% 0.32	 |oob_r% 0.23
@@ -13,4 +12,4 @@ NB06_1	 |oob_b% 0.02	 |oob_r% 0.01
 NB05_3	 |oob_b% 0.03	 |oob_r% 0.01
 NB04_2	 |oob_b% 0.03	 |oob_r% 0.03
 NB03_2	 |oob_b% 0.03	 |oob_r% 0.04
-NB02A_7	 |oob_b% 0.03	 |oob_r% 0.01
+NB02A_7	 |oob_b% 0.04	 |oob_r% 0.01

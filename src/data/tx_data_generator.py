@@ -11,6 +11,15 @@ Created on Thu May  2 14:34:56 2024
 -User has to define what data is to be prepped (spatial, tilt, oob).
 -Output will be saved at {PROJECT}/data/processed.
 -Output folder should have {PROJECT}/data/processed/{filter_name}/{spatial,oob,tilt} structure.
+
+2024-06-26: Updated in band fill intervals.
+#Bash for generating folder list
+#for fld in */tilt/* ; do echo \"$(echo $fld | cut -d "/" -f3)\",; done
+
+2024-06-27: Wl shift due to temperature has been commented out because the lab
+measurements were done at the same temperature at which SUIT FW Mount is
+functioning- 21 deg C.
+
 @author: janmejoyarch
 """
 import glob, os
@@ -46,22 +55,28 @@ def tx_percent(flt, dark, source, dark_source):
 def wl_calib(wvlen, filt, grating):
     '''
     Calibrates wavelength axis of the data. Applies spectroscope wl calibration,
-    air to vacuum correction and wl shift due to temp.
+    air to vacuum correction.
+    Wl shift due to temperature has been commented out because the lab
+    measurements were done at the same temperature at which SUIT FW Mount is
+    functioning- 21 deg C.
     '''
     filt_list=['BB01', 'BB02', 'BB03', 'BP02', 'BP03', 'BP04', 'NB01', 
                'NB02', 'NB03', 'NB04', 'NB05', 'NB06', 'NB07', 'NB08']
     air_to_vac_list= [0.069, 0.082, 0.092, 0.082, 0.100, 0.090, 0.068, 
                  0.082, 0.083, 0.083, 0.083, 0.087, 0.110, 0.112]
-    temp_pm=np.array([0.88*25, 1.95*25, 2.2*24, 1.95*25, 2.45*25, 2.17*25, 3*25, 
-             1.9*24, 2.0*25, 2.0*25, 2.0*25, 2.1*24, 2.7*24, 2.8*25])*10**-3
+    #temp shift should be applied if operating temp and measurement temperatures
+    #of filter spectrum are different. The amount of shift is coeff*delta T (degC)
+    #For our case, measurement temp and operating temp are both 21 deg. delta T =0
+    #temp_pm=np.array([0.88*25, 1.95*25, 2.2*24, 1.95*25, 2.45*25, 2.17*25, 3*25, 
+             #1.9*24, 2.0*25, 2.0*25, 2.0*25, 2.1*24, 2.7*24, 2.8*25])*10**-3
     if grating < 1201:
         a, b, c= -6.48e-7, 1.08e-3, -3.10e-1 #for 1200 lpmm
     elif grating > 2399:
         a, b, c= -8.21e-7, 9.96e-5, 1.51e-1 #for 2400 lpmm
     hrs_calib_dev= (a*wvlen**2)+(b*wvlen)+c 
     a2v_shift= air_to_vac_list[filt_list.index(filt)]
-    temp_shift= temp_pm[filt_list.index(filt)]
-    wl_corrected= (wvlen-hrs_calib_dev)+a2v_shift+temp_shift
+    #temp_shift= temp_pm[filt_list.index(filt)]
+    wl_corrected= (wvlen-hrs_calib_dev)+a2v_shift #+temp_shift
     return wl_corrected
 
 def plot(x,y_ls, lo=None, hi=None):
@@ -75,48 +90,17 @@ def plot(x,y_ls, lo=None, hi=None):
      
 if __name__=='__main__':
     #Bash for generating folder list
-    #for fld in */oob/* ; do echo \"$(echo $fld | cut -d "/" -f3)\",; done
-    for FLD in ["BB1_3_oob_190",
-    "BB1_3_oob_262.5",
-    "BB1_3_oob_305",
-    "BB1_3_spatial",
-    "BB1_5_inband",
-    "BB1_5_oob_blue",
-    "BB1_5_oob_red",
-    "BB2_3_oob_229nm",
-    "BB2_3_oob_323nm",
-    "BB2_3_spatial_255nm",
-    "BB2_3_spatial_290nm",
-    "BB3_3_oob_299nm",
-    "BB3_3_oob_380nm",
-    "BB3_3_spatial",
-    "BP2_8_252-272_OOB",
-    "BP2_8_262-282",
-    "BP2_8_278-297",
-    "BP2_8_290-310_OOB",
-    "BP3_2_oob_269",
-    "BP3_2_oob_427",
-    "BP3_2_spatial_310",
-    "BP3_2_spatial_350",
-    "BP3_2_spatial_390",
-    "BP4_2_280",
-    "BP4_2_320",
-    "BP4_2_360",
-    "BP4_2_390_OOB",
-    "NB1_2_inband",
-    "NB1_2_oob_blue",
-    "NB1_2_oob_red",
-    "NB2A_7",
-    "NB3_2",
-    "NB4_2",
-    "NB5_3",
-    "NB6_1",
-    "NB7_2",
-    "NB8_1"]:
+    #for fld in */tilt/* ; do echo \"$(echo $fld | cut -d "/" -f3)\",; done
+    for FLD in ["NB1_2",
+                "NB2A_7",
+                "NB3_2",
+                "NB4_2",
+                "NB5_3",
+                "NB6_1",
+                "NB7_2"]:
         
         #####USER-DEFINED###
-        #FLD= 'NB1_1_spatial_254' #folder name for raw data
-        TYP= 'oob' #type of data
+        TYP= 'tilt' #type of data
         SAVE= True
         project_path= os.path.expanduser('~/Dropbox/Janmejoy_SUIT_Dropbox/science_filter_characterization/science_filter_charactrerization_scripts/science_filter_plots_project/')
         ####################
