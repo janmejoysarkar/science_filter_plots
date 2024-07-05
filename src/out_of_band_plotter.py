@@ -19,6 +19,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 from scipy.integrate import simpson
+import scienceplots
+
 
 def tx_gen(oob_blue, oob_red, ib, ib_wl_mn, ib_wl_mx, oob_wl_mn, oob_wl_mx):
     '''
@@ -31,25 +33,26 @@ def tx_gen(oob_blue, oob_red, ib, ib_wl_mn, ib_wl_mx, oob_wl_mn, oob_wl_mx):
     return(ib, oob_blue, oob_red)
 
 def plotter(filt_name, ib, oob_blue, oob_red, limit, fill_ib, fill_oob_r, fill_oob_b):  
-    plt.figure(filt_name, figsize=(6,4))
-    plt.plot(oob_blue[:,0], oob_blue[:,1], color= '#1f77b4', label="Out of band")
-    plt.plot(oob_red[:,0], oob_red[:,1], color= '#1f77b4')
-    plt.plot(ib[:,0], ib[:,1], color='#ff7f0e', label="In band")
-    plt.fill_between(fill_ib[:,0],fill_ib[:,1], y2=0, linewidth=0, color='orange', alpha=0.3)
-    plt.fill_between(fill_oob_r[:,0], fill_oob_r[:,1], y2=0, linewidth=0, color='blue', alpha=0.3)
-    if len(oob_blue != 0):
-        plt.fill_between(fill_oob_b[:,0], fill_oob_b[:,1], y2=0, linewidth=0, color='blue', alpha=0.3)
-    
-    plt.yscale('log')
-    plt.xlabel('Wavelength (nm)')
-    plt.ylabel('Transmission %')
-    plt.axhline(y=limit, color='#2ca02c', label= "Acceptable limit")
-    plt.title(filt_name+'_out_of_band')
-    plt.legend()
-    plt.grid()
-    sav= os.path.expanduser('~/Dropbox/Janmejoy_SUIT_Dropbox/science_filter_characterization/science_filter_charactrerization_scripts/science_filter_plots_project/products/out_of_band/')
-    if (save_figure == True): plt.savefig(sav+filt_name+"_out_of_band.pdf", dpi=300)
-    plt.show()
+    with plt.style.context(['science', 'nature']):
+        plt.figure(filt_name, figsize=(6,4))
+        plt.plot(oob_blue[:,0], oob_blue[:,1], color= 'black', label="Out of band")
+        plt.plot(oob_red[:,0], oob_red[:,1], color= 'black')
+        plt.plot(ib[:,0], ib[:,1], color='red', label="In band")
+        plt.fill_between(fill_ib[:,0],fill_ib[:,1], y2=0, linewidth=0, color='red', alpha=0.2)
+        plt.fill_between(fill_oob_r[:,0], fill_oob_r[:,1], y2=0, linewidth=0, color='black', alpha=0.2)
+        if len(oob_blue != 0):
+            plt.fill_between(fill_oob_b[:,0], fill_oob_b[:,1], y2=0, linewidth=0, color='black', alpha=0.2)
+        plt.tick_params(axis='both', which='major', labelsize=12)
+        plt.yscale('log')
+        plt.xlabel('Wavelength (nm)', fontsize=12)
+        plt.ylabel('Transmission \%', fontsize=12)
+        plt.axhline(y=limit, color='#2ca02c', label= "Acceptable limit")
+        plt.title(filt_name+'_out_of_band', fontsize=12)
+        plt.legend(fontsize=12)
+        plt.grid(alpha=0.5)
+        sav= os.path.expanduser('~/Dropbox/Janmejoy_SUIT_Dropbox/science_filter_characterization/science_filter_charactrerization_scripts/science_filter_plots_project/products/out_of_band/')
+        if (save_figure == True): plt.savefig(sav+filt_name+"_out_of_band.pdf", dpi=300)
+        plt.show()
     
 def fill_interval(tx, fill_range, cent=None):
     '''

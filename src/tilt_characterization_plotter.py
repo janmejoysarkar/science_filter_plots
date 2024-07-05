@@ -11,23 +11,26 @@ Created on Mon Oct 30 12:04:00 2023
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import scienceplots
 
 def tilt_plotter(file, wl_min, wl_max, target, filter_name, saveplot=None):
     data=np.loadtxt(file, skiprows=1)
     plot_data=data[np.logical_and(data[:,0]>wl_min, data[:,0]<wl_max)] #selects the requisite wavelength
-    plt.figure(figsize=(6,4))
-    angle=0
-    for i in range(7,14):
-        plt.plot(plot_data[:,0], plot_data[:,i], label=f"{angle}°")
-        angle+=1
-    plt.axvline(target, color='black', label= 'Central λ')
-    plt.legend()
-    plt.xlabel('Wavelength (nm)')
-    plt.ylabel('% Transmission')
-    plt.title(filter_name+'_tilt | λ= '+str(target))
-    plt.grid()
-    if saveplot==True: plt.savefig(f'{project_path}products/tilt/{filter_name}_tilt.pdf', dpi=300)
-    plt.show()
+    with plt.style.context(['science', 'nature']):
+        plt.figure(figsize=(6,4))
+        angle=0
+        plt.tick_params(axis='both', which='major', labelsize=12)
+        for i in range(7,14):
+            plt.plot(plot_data[:,0], plot_data[:,i], label=f"{angle}°")
+            angle+=1
+        plt.axvline(target, color='black', label= r'Central $\lambda$')
+        plt.legend(fontsize=12)
+        plt.xlabel('Wavelength (nm)', fontsize=12)
+        plt.ylabel('Transmission \%', fontsize=12)
+        plt.title(filter_name+'-tilt | $\lambda$= '+str(target), fontsize=12)
+        plt.grid(alpha=0.5)
+        if saveplot==True: plt.savefig(f'{project_path}products/tilt/{filter_name}_tilt.pdf', dpi=300)
+        plt.show()
 
 if __name__=='__main__':
 

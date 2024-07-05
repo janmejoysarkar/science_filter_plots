@@ -15,22 +15,26 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.interpolate import interp1d
 import os
+import scienceplots
+
    
 def plotter (filter_name, input_data, wl_mn, wl_mx, save_plot=None):
     data=input_data[np.logical_and(input_data[:,0]>wl_mn, input_data[:,0]<wl_mx)]
-    plt.figure(filter_name, figsize=(6,4))
-    plt.plot(data[:,0], data[:,1], color= '#1f77b4')#, label= "Center")
-    plt.plot(data[:,0], data[:,2], color='#ff7f0e')#, label= "Top")
-    plt.plot(data[:,0], data[:,3], color='#2ca02c')#, label= "Left")
-    plt.plot(data[:,0], data[:,4], color='#d62728')#, label= "Right")
-    plt.plot(data[:,0], data[:,5], color='#9467bd')#, label= "Bottom")
-    plt.title("Spatial transmission- "+filter_name)
-    plt.legend(["Center", "Left", "Right", "Top", "Bottom"])
-    plt.xlabel("Wavelength (nm)")
-    plt.ylabel("Transmission %")
-    plt.grid()
-    if save_plot==True: plt.savefig(os.path.join(folder,f'products/spatial/{filter_name}_spatial.pdf'), dpi=300)
-    plt.show()
+    with plt.style.context(['science','nature']):
+        plt.figure(filter_name, figsize=(6,4))
+        plt.tick_params(axis='both', which='major', labelsize=12)
+        plt.plot(data[:,0], data[:,1], color= '#1f77b4')#, label= "Center")
+        plt.plot(data[:,0], data[:,2], color='#ff7f0e')#, label= "Top")
+        plt.plot(data[:,0], data[:,3], color='#2ca02c')#, label= "Left")
+        plt.plot(data[:,0], data[:,4], color='#d62728')#, label= "Right")
+        plt.plot(data[:,0], data[:,5], color='#9467bd')#, label= "Bottom")
+        plt.title("Spatial transmission- "+filter_name, fontsize=12)
+        plt.legend(["Center", "Left", "Right", "Top", "Bottom"], fontsize=12)
+        plt.xlabel("Wavelength (nm)", fontsize=12)
+        plt.ylabel("Transmission \%", fontsize=12)
+        plt.grid(alpha=0.5)
+        if save_plot==True: plt.savefig(os.path.join(folder,f'products/spatial/{filter_name}_spatial.pdf'), dpi=300)
+        plt.show()
 
 def multiplotter (filter_name, input_data_ls, wl_mn_ls, wl_mx_ls, save_plot=None):
     #For plots requiring multiple inputs to be concatenated for plotting.
@@ -39,19 +43,21 @@ def multiplotter (filter_name, input_data_ls, wl_mn_ls, wl_mx_ls, save_plot=None
         for i in range(1, len(input_data_ls)):
             data_interim=input_data_ls[i][np.logical_and(input_data_ls[i][:,0]>wl_mn_ls[i], input_data_ls[i][:,0]<wl_mx_ls[i])]
             data= np.concatenate((data, data_interim))
-    plt.figure(filter_name, figsize=(6,4))
-    plt.plot(data[:,0], data[:,1], color= '#1f77b4')#, label= "Center")
-    plt.plot(data[:,0], data[:,2], color='#ff7f0e')#, label= "Top")
-    plt.plot(data[:,0], data[:,3], color='#2ca02c')#, label= "Left")
-    plt.plot(data[:,0], data[:,4], color='#d62728')#, label= "Right")
-    plt.plot(data[:,0], data[:,5], color='#9467bd')#, label= "Bottom")
-    plt.title("Spatial transmission- "+filter_name)
-    plt.legend(["Center", "Left", "Right", "Top", "Bottom"])
-    plt.xlabel("Wavelength (nm)")
-    plt.ylabel("Transmission %")
-    plt.grid()
-    if save_plot==True: plt.savefig(os.path.join(folder,f'products/spatial/{filter_name}_spatial.pdf'), dpi=300)
-    plt.show()
+    with plt.style.context(['science','nature']):
+        plt.figure(filter_name, figsize=(6,4))
+        plt.tick_params(axis='both', which='major', labelsize=12)
+        plt.plot(data[:,0], data[:,1], color= '#1f77b4')#, label= "Center")
+        plt.plot(data[:,0], data[:,2], color='#ff7f0e')#, label= "Top")
+        plt.plot(data[:,0], data[:,3], color='#2ca02c')#, label= "Left")
+        plt.plot(data[:,0], data[:,4], color='#d62728')#, label= "Right")
+        plt.plot(data[:,0], data[:,5], color='#9467bd')#, label= "Bottom")
+        plt.title("Spatial transmission- "+filter_name, fontsize=12)
+        plt.legend(["Center", "Left", "Right", "Top", "Bottom"], fontsize=12)
+        plt.xlabel("Wavelength (nm)", fontsize=12)
+        plt.ylabel("Transmission \%", fontsize=12)
+        plt.grid(alpha=0.5)
+        if save_plot==True: plt.savefig(os.path.join(folder,f'products/spatial/{filter_name}_spatial.pdf'), dpi=300)
+        plt.show()
 
 def deviation(filter_name, input_data, wl_min, wl_mx):
     data=input_data[np.logical_and(input_data[:,0]>wl_min, input_data[:,0]<wl_mx)]
@@ -96,6 +102,7 @@ if __name__=='__main__':
     
     ### Plotting & deviation analysis ###
     folder=os.path.expanduser('~/Dropbox/Janmejoy_SUIT_Dropbox/science_filter_characterization/science_filter_charactrerization_scripts/science_filter_plots_project/')
+    
     # NB2A_7 #
     ftr_name= "NB02"
     file= f'{folder}data/processed/{ftr_name}/spatial/NB2A_7_spatial.txt' 
