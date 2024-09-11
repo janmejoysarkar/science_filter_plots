@@ -107,75 +107,75 @@ if __name__=='__main__':
     ftr_name= "NB02"
     file= f'{folder}data/processed/{ftr_name}/spatial/NB2A_7_spatial.txt' 
     wl_mn, wl_mx= 275, 279
-    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=True)
+    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=False)
     deviation(ftr_name, np.loadtxt(file, skiprows=1),  wl_mn, wl_mx)
     
     # NB3_3 #
     ftr_name= "NB03"
     file= f'{folder}data/processed/{ftr_name}/spatial/NB3_3_spatial.txt' 
     wl_mn, wl_mx= 278.5, 281.5
-    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=True)
+    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=False)
     deviation(ftr_name, np.loadtxt(file, skiprows=1),  wl_mn, wl_mx)
     
     # NB4_2 #
     ftr_name= "NB04"
     file= f'{folder}data/processed/{ftr_name}/spatial/NB4_2_spatial.txt' 
     wl_mn, wl_mx= 278.5, 283
-    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=True)
+    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=False)
     deviation(ftr_name, np.loadtxt(file, skiprows=1),  wl_mn, wl_mx)
     
     # NB5_4 #
     ftr_name= "NB05"
     file= f'{folder}data/processed/{ftr_name}/spatial/NB5_4_1200lpmm_500blaze_spatial.txt' 
     wl_mn, wl_mx= 280.5, 286
-    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=True)
+    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=False)
     deviation(ftr_name, np.loadtxt(file, skiprows=1),  wl_mn, wl_mx)
     
     # NB6_3 #
     ftr_name= "NB06"
     file= f'{folder}data/processed/{ftr_name}/spatial/NB6_3_spatial.txt' 
     wl_mn, wl_mx= 296, 304
-    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=True)
+    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=False)
     deviation(ftr_name, np.loadtxt(file, skiprows=1),  wl_mn, wl_mx)
     
     # NB7_1 #
     ftr_name= "NB07"
     file= f'{folder}data/processed/{ftr_name}/spatial/NB7_1_spatial.txt' 
     wl_mn, wl_mx= 385, 391
-    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=True)
+    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=False)
     deviation(ftr_name, np.loadtxt(file, skiprows=1),  wl_mn, wl_mx)
     
     # NB8_1 #
     ftr_name= "NB08"
     file= f'{folder}data/processed/{ftr_name}/spatial/NB8_1_spatial.txt' 
     wl_mn, wl_mx= 396.4, 397.3
-    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=True)
+    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=False)
     deviation(ftr_name, np.loadtxt(file, skiprows=1),  wl_mn, wl_mx)
     
     # NB8_2 #
     ftr_name= "NB08"
     file= f'{folder}data/processed/{ftr_name}/spatial/NB8_2_1200lpmm_500blaze_spatial.txt' 
     wl_mn, wl_mx= 396.4, 397.3
-    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=True)
+    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=False)
     deviation(ftr_name, np.loadtxt(file, skiprows=1),  wl_mn, wl_mx)
     
     # BB1_5 #
     ftr_name= "BB01"
     file= f'{folder}data/processed/{ftr_name}/spatial/BB1_5_inband_spatial.txt' 
     wl_mn, wl_mx= 100, 400
-    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=True)
+    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=False)
     
     # BB1_3 #
     ftr_name= "BB01"
     file= f'{folder}data/processed/{ftr_name}/spatial/BB1_3_spatial_spatial.txt' 
     wl_mn, wl_mx= 100, 400
-    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=True)
+    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=False)
     
     # BB3_3 #
     ftr_name= "BB03"
     file= f'{folder}data/processed/{ftr_name}/spatial/BB3_3_spatial_spatial.txt' 
     wl_mn, wl_mx= 100, 400
-    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=True)
+    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot=False)
     
     # NB1_1 #
     ftr_name= "NB01"
@@ -183,7 +183,7 @@ if __name__=='__main__':
     wl_mn1, wl_mx1= 180, 400
     file2= f'{folder}data/processed/{ftr_name}/spatial/NB1_1_spatial_254_spatial.txt' 
     wl_mn2, wl_mx2= 180, 400
-    multiplotter (ftr_name, [np.loadtxt(file1, skiprows=1), np.loadtxt(file2, skiprows=1)], [wl_mn1, wl_mn2], [wl_mx1, wl_mx2], save_plot=True)
+    multiplotter (ftr_name, [np.loadtxt(file1, skiprows=1), np.loadtxt(file2, skiprows=1)], [wl_mn1, wl_mn2], [wl_mx1, wl_mx2], save_plot=False)
 
     # BB2_3 #
     ftr_name= "BB02"
@@ -191,7 +191,7 @@ if __name__=='__main__':
     wl_mn1, wl_mx1= 200, 400
     file2= f'{folder}data/processed/{ftr_name}/spatial/BB2_3_spatial_290nm_spatial.txt' 
     wl_mn2, wl_mx2=  276, 400
-    multiplotter (ftr_name, [np.loadtxt(file1, skiprows=1), np.loadtxt(file2, skiprows=1)], [wl_mn1, wl_mn2], [wl_mx1, wl_mx2], save_plot=True)
+    multiplotter (ftr_name, [np.loadtxt(file1, skiprows=1), np.loadtxt(file2, skiprows=1)], [wl_mn1, wl_mn2], [wl_mx1, wl_mx2], save_plot=False)
     
     # BP2_8 #
     ftr_name= "BP02"
@@ -199,7 +199,7 @@ if __name__=='__main__':
     wl_mn1, wl_mx1= 265, 275
     file2= f'{folder}data/processed/{ftr_name}/spatial/BP2_8_278-297_spatial.txt' 
     wl_mn2, wl_mx2= 282, 295
-    multiplotter (ftr_name, [np.loadtxt(file1, skiprows=1), np.loadtxt(file2, skiprows=1)], [wl_mn1, wl_mn2], [wl_mx1, wl_mx2], save_plot=True)
+    multiplotter (ftr_name, [np.loadtxt(file1, skiprows=1), np.loadtxt(file2, skiprows=1)], [wl_mn1, wl_mn2], [wl_mx1, wl_mx2], save_plot=False)
 
     # BP3_2 #
     ftr_name= "BP03"
@@ -210,7 +210,7 @@ if __name__=='__main__':
     file3= f'{folder}data/processed/{ftr_name}/spatial/BP3_2_spatial_390_spatial.txt'
     wl_mn3, wl_mx3= 200, 500
     multiplotter (ftr_name, [np.loadtxt(file1, skiprows=1), np.loadtxt(file2, skiprows=1), np.loadtxt(file3, skiprows=1)], 
-                  [wl_mn1, wl_mn2, wl_mn3], [wl_mx1, wl_mx2, wl_mx3], save_plot=True)
+                  [wl_mn1, wl_mn2, wl_mn3], [wl_mx1, wl_mx2, wl_mx3], save_plot=False)
 
     # BP4_4 #
     ftr_name= "BP04"
@@ -221,4 +221,4 @@ if __name__=='__main__':
     file3= f'{folder}data/processed/{ftr_name}/spatial/BP4_4_spatial_350_spatial.txt'
     wl_mn3, wl_mx3= 200, 500
     multiplotter (ftr_name, [np.loadtxt(file1, skiprows=1), np.loadtxt(file2, skiprows=1), np.loadtxt(file3, skiprows=1)], 
-                  [wl_mn1, wl_mn2, wl_mn3], [wl_mx1, wl_mx2, wl_mx3], save_plot=True)
+                  [wl_mn1, wl_mn2, wl_mn3], [wl_mx1, wl_mx2, wl_mx3], save_plot=False)
