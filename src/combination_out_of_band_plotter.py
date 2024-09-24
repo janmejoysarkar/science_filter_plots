@@ -19,7 +19,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 from scipy.integrate import simpson
-#import scienceplots
+import scienceplots
 from scipy.interpolate import interp1d
 
 
@@ -86,6 +86,45 @@ def wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, oob_limit, fill_range, cent=N
     plotter(filt_name, tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt,oob_limit, fill_ib, fill_oob_r, fill_oob_b)
     integrate(fill_ib, fill_oob_r, fill_oob_b)
 
+def combined(FILT1, FILT2, lamda1, lamda2, fill_width, cent=None):
+    '''
+    - Concatenates OOB and IB profiles to make it into one curve.
+    - Performs linear interpolation to get the interpolated graph in
+    steps of 0.01 nm.
+    - Returns > Integration ratios taken from integrate function
+              > Plots
+    '''
+
+    concatenated_1= np.concatenate((FILT1[1], FILT1[0], FILT1[2]))
+    x_new= np.arange(lamda1, lamda2, 0.01)#USER INPUT NEEDED
+    fn= interp1d(concatenated_1[:,0], concatenated_1[:,1])
+    y_new_1= fn(x_new)
+    if len(FILT2[1])!= 0:
+        concatenated_2= np.concatenate((FILT2[1], FILT2[0], FILT2[2]))
+    else:
+        concatenated_2= np.concatenate((FILT2[0], FILT2[2]))
+    fn= interp1d(concatenated_2[:,0], concatenated_2[:,1])
+    y_new_2= fn(x_new)
+    
+    final= np.column_stack((x_new, y_new_1*y_new_2))
+
+    fill_ib= fill_interval(final, fill_width, cent)
+    fill_oob_b= fill_interval(final, fill_width, FILT1[1][int(len(FILT1[1])/2)][0])
+    fill_oob_r= fill_interval(final, fill_width, FILT1[2][int(len(FILT1[2])/2)][0])
+    integrate(fill_ib, fill_oob_r, fill_oob_b)
+    
+    with plt.style.context(['science', 'nature']):
+        plt.figure(figsize=(6,4))
+        plt.plot(final[:,0], final[:,1], color= 'black', label="Out of band")
+        plt.fill_between(fill_ib[:,0],fill_ib[:,1], y2=0, linewidth=0, color='red', alpha=0.2)
+        plt.fill_between(fill_oob_r[:,0], fill_oob_r[:,1], y2=0, linewidth=0, color='black', alpha=0.2)
+        plt.fill_between(fill_oob_b[:,0], fill_oob_b[:,1], y2=0, linewidth=0, color='black', alpha=0.2)
+        plt.yscale('log')
+        plt.xlabel('Wavelength (nm)', fontsize=12)
+        plt.ylabel('Transmission \%', fontsize=12)
+        plt.title(filt_name+'_out_of_band', fontsize=12)
+        plt.grid(alpha=0.5)
+        plt.show()
 
 if __name__=='__main__':
     save_figure=False
@@ -108,35 +147,6 @@ if __name__=='__main__':
     ib= np.loadtxt(folder+'BB01/oob/BB1_3_spatial_inband.txt', skiprows=1, usecols=(0,1))
     BB01= tx_gen(oob_blue, oob_red, ib, 210, 245, 190, 300)
     
-    
-    concatenated_1= np.concatenate((NB01[1], NB01[0], NB01[2]))
-    x_new= np.arange(191, 256, 0.01)#USER INPUT NEEDED
-    fn= interp1d(concatenated_1[:,0], concatenated_1[:,1])
-    y_new_1= fn(x_new)
-
-    concatenated_2= np.concatenate((BB01[1], BB01[0], BB01[2]))
-    x_new= np.arange(191, 256, 0.01) #USER INPUT NEEDED
-    fn= interp1d(concatenated_2[:,0], concatenated_2[:,1])
-    y_new_2= fn(x_new)
-    
-    final= np.column_stack((x_new, y_new_1*y_new_2))
-
-    fill_ib= fill_interval(final, 5, 214)#USER INPUT NEEDED
-    fill_oob_b= fill_interval(final, 5, NB01[1][int(len(NB01[1])/2)][0])
-    fill_oob_r= fill_interval(final, 5, NB01[2][int(len(NB01[2])/2)][0])
-    
-    integrate(fill_ib, fill_oob_r, fill_oob_b)
-
-    plt.figure(figsize=(6,4))
-    plt.plot(final[:,0], final[:,1], color= 'black', label="Out of band")
-    plt.fill_between(fill_ib[:,0],fill_ib[:,1], y2=0, linewidth=0, color='red', alpha=0.2)
-    plt.fill_between(fill_oob_r[:,0], fill_oob_r[:,1], y2=0, linewidth=0, color='black', alpha=0.2)
-    plt.fill_between(fill_oob_b[:,0], fill_oob_b[:,1], y2=0, linewidth=0, color='black', alpha=0.2)
-    plt.yscale('log')
-    plt.show()
-
-
-'''
 
     ## BB3_3 ##
     filt_name="BB03_3"
@@ -144,7 +154,6 @@ if __name__=='__main__':
     oob_red=np.loadtxt(folder+'BB03/oob/BB3_3_oob_380nm_oob.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'BB03/oob/BB3_3_spatial_inband.txt', skiprows=1, usecols=(0,1))
     BB03= tx_gen(oob_blue, oob_red, ib, 318, 359, 292, 400)
-    #wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 5)
 
     ## BB2_3 ##
     filt_name="BB02_3"
@@ -155,8 +164,6 @@ if __name__=='__main__':
     oob_blue=np.loadtxt(folder+'BB02/oob/BB2_3_oob_229nm_oob.txt', skiprows=1, usecols= (0,1))
     oob_red=np.loadtxt(folder+'BB02/oob/BB2_3_oob_323nm_oob.txt', skiprows=1, usecols= (0,1))
     BB02= tx_gen(oob_blue, oob_red, ib, 245, 304, 190, 400)
-    ##wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 5)
-
 
     ## BB1_3 ##
     filt_name="BB01_3"
@@ -164,7 +171,6 @@ if __name__=='__main__':
     oob_red=np.loadtxt(folder+'BB01/oob/BB1_3_oob_262.5_oob.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'BB01/oob/BB1_3_spatial_inband.txt', skiprows=1, usecols=(0,1))
     BB01= tx_gen(oob_blue, oob_red, ib, 210, 245, 190, 300)
-    ##wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 5)
 
     ## BP2_6 ##
     filt_name= "BP02_6"
@@ -174,7 +180,6 @@ if __name__=='__main__':
     ib2= np.loadtxt(folder+'BP02/oob/BP2_8_278-297_inband.txt', skiprows=1, usecols= (0,1))
     ib=np.concatenate((ib1[:-300], ib2))
     BP02= tx_gen(oob_blue, oob_red, ib, 268, 290, 190, 340)
-    ##wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 5)
 
     ## BP4_2 ##
     filt_name="BP04_2"
@@ -183,9 +188,8 @@ if __name__=='__main__':
     ib3= np.loadtxt(folder+'BP04/oob/BP4_2_360_inband.txt', skiprows=1, usecols= (0,1))
     ib=np.concatenate((ib1, ib2, ib3))
     oob_red=np.loadtxt(folder+'BP04/oob/BP4_2_390_OOB_oob.txt', skiprows=1, usecols=(0,1))
-    oob_blue=np.vstack((np.arange(1,10,1), np.arange(1,10,1))) #Dummy Value
+    oob_blue=np.column_stack((np.zeros(10), np.zeros(10))) #Dummy Value
     BP04= tx_gen(oob_blue, oob_red, ib, 292, 369, 200, 450)
-    ##wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.001, 5)
 
     ## BP3_2 ##
     filt_name="BP03_2"
@@ -196,42 +200,36 @@ if __name__=='__main__':
     oob_blue=np.loadtxt(folder+'BP03/oob/BP3_2_oob_269_oob.txt', skiprows=1, usecols= (0,1))
     oob_red=np.loadtxt(folder+'BP03/oob/BP3_2_oob_427_oob.txt', skiprows=1, usecols= (0,1))
     BP03= tx_gen(oob_blue, oob_red, ib, 292, 407, 190, 450)
-    #wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.001, 5)
 
     ## NB7_2 ##
     filt_name="NB07_2"
     oob=np.loadtxt(folder+'NB07/oob/NB7_2_oob.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'NB07/oob/NB7_2_inband.txt', skiprows=1, usecols=(0,1))
     NB07= tx_gen(oob, oob, ib, 384, 392, 255, 420)
-    #wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1, 388)
 
     ## NB6_1 ##
     filt_name="NB06_1"
     oob=np.loadtxt(folder+'NB06/oob/NB6_1_oob.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'NB06/oob/NB6_1_inband.txt', skiprows=1, usecols=(0,1))
     NB06= tx_gen(oob, oob, ib, 296, 303, 255, 400)
-    #wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1, 300)
 
     ## NB5_3 ##
     filt_name="NB05_3"
     oob=np.loadtxt(folder+'NB05/oob/NB5_3_oob.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'NB05/oob/NB5_3_inband.txt', skiprows=1, usecols=(0,1))
     NB05= tx_gen(oob, oob, ib, 280, 286, 250, 400)
-    #wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1, 283.54)
 
     ## NB4_2 ##
     filt_name="NB04_2"
     oob=np.loadtxt(folder+'NB04/oob/NB4_2_oob.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'NB04/oob/NB4_2_inband.txt', skiprows=1, usecols=(0,1))
     NB04= tx_gen(oob, oob, ib, 278, 283, 250, 400)
-    #wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1, 280.75)
 
     ## NB3_2 ##
     filt_name="NB03_2"
     oob=np.loadtxt(folder+'NB03/oob/NB3_2_oob.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'NB03/oob/NB3_2_inband.txt', skiprows=1, usecols=(0,1))
     NB03= tx_gen(oob, oob, ib, 278, 282, 255, 400)
-    #wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1, 280.05)
 
     ## NB2A_7 ##
     filt_name="NB02A_7"
@@ -239,4 +237,27 @@ if __name__=='__main__':
     ib= np.loadtxt(folder+'NB02/oob/NB2A_7_inband.txt', skiprows=1, usecols=(0,1))
     NB02= tx_gen(oob, oob, ib, 275, 279, 255, 400)
     #wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1, 277)
-'''
+   
+    #Combined Plots
+    filt_name="NB01"; combined(NB01, BB01, int(NB01[1][0][0])+1, int(NB01[2][-1][0]), 5, 214)
+    filt_name="NB02"; combined(NB02, BP02, int(NB02[1][0][0])+1, int(NB02[2][-1][0]), 1, 277)
+    filt_name="NB03"; combined(NB03, BP02, int(NB03[1][0][0])+1, int(NB03[2][-1][0]), 1, 280.05)
+    filt_name="NB04"; combined(NB04, BP02, int(NB04[1][0][0])+1, int(NB04[2][-1][0]), 1, 280.75)
+    filt_name="NB05"; combined(NB05, BP02, int(NB05[1][0][0])+1, int(NB05[2][-1][0]), 1, 283.54)
+    filt_name="NB06"; combined(NB06, BP03, int(NB06[1][0][0])+1, int(NB06[2][-1][0]), 1, 300)
+    filt_name="NB07"; combined(NB07, BP03, int(NB07[1][0][0])+1, int(NB07[2][-1][0]), 1, 388)
+    filt_name="BB01"; combined(BB01, BB01, int(BB01[1][0][0])+1, int(BB01[2][-1][0]), 5, cent=None)
+    filt_name="BB03"; combined(BB03, BP04, 293, int(BB03[2][-1][0]), 5, cent=None)
+    #filt_name="BB02"; combined(BB02, BP04, 293, int(BB02[2][-1][0]), 5, cent=None)
+
+    '''
+
+    191, 256,
+    256, 298,
+    270, 288,
+    272, 289,
+    262, 304,
+    279, 321,
+    368, 408,
+    191, 284,
+    '''
