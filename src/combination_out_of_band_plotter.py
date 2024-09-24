@@ -1,18 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed Nov  8 14:48:31 2023
+Created on 24 Sep 2024.
+@author: janmejoyarch
 
-@author: janmejoy
-
--Created to plot the OOB tx of science filters with inband at 0deg angle of
-incidence.
--Data is in wl vs tx% form.
--2024-04-23: Modification made to project form.
-
-Modification log
---Nov 15 2023
---Dec 15 2023
+- Created to make consolidated OOB vs IB plots for filter combinations.
+- This is to show that filter combinations give good throughput and sufficient
+out of band blockage.
 """
 
 import matplotlib.pyplot as plt
@@ -33,28 +27,6 @@ def tx_gen(oob_blue, oob_red, ib, ib_wl_mn, ib_wl_mx, oob_wl_mn, oob_wl_mx):
     ib=ib[np.logical_and(ib[:,0]>ib_wl_mn, ib[:,0]<ib_wl_mx)]
     return(ib, oob_blue, oob_red)
 
-def plotter(filt_name, ib, oob_blue, oob_red, limit, fill_ib, fill_oob_r, fill_oob_b):  
-    with plt.style.context(['science', 'nature']):
-        plt.figure(filt_name, figsize=(6,4))
-        plt.plot(oob_blue[:,0], oob_blue[:,1], color= 'black', label="Out of band")
-        plt.plot(oob_red[:,0], oob_red[:,1], color= 'black')
-        plt.plot(ib[:,0], ib[:,1], color='red', label="In band")
-        plt.fill_between(fill_ib[:,0],fill_ib[:,1], y2=0, linewidth=0, color='red', alpha=0.2)
-        plt.fill_between(fill_oob_r[:,0], fill_oob_r[:,1], y2=0, linewidth=0, color='black', alpha=0.2)
-        if len(oob_blue != 0):
-            plt.fill_between(fill_oob_b[:,0], fill_oob_b[:,1], y2=0, linewidth=0, color='black', alpha=0.2)
-        plt.tick_params(axis='both', which='major', labelsize=12)
-        plt.yscale('log')
-        plt.xlabel('Wavelength (nm)', fontsize=12)
-        plt.ylabel('Transmission \%', fontsize=12)
-        plt.axhline(y=limit, color='#2ca02c', label= "Acceptable limit")
-        plt.title(filt_name+'_out_of_band', fontsize=12)
-        plt.legend(fontsize=12)
-        plt.grid(alpha=0.5)
-        sav= os.path.expanduser('~/Dropbox/Janmejoy_SUIT_Dropbox/science_filter_characterization/science_filter_charactrerization_scripts/science_filter_plots_project/products/out_of_band/')
-        if (save_figure == True): plt.savefig(sav+filt_name+"_out_of_band.pdf", dpi=300)
-        plt.show()
-    
 def fill_interval(tx, fill_range, cent=None):
     '''
     picks the center of the tx spectrum and gives intervals within the +- fill range
@@ -80,11 +52,6 @@ def integrate(fill_ib, fill_oob_r, fill_oob_b):
     else:
         oob_blue_percent= -200
     print(f"{filt_name}\t |oob_b% {round(oob_blue_percent,2)}\t |oob_r% {round(oob_red_percent,2)}")
-    
-def wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, oob_limit, fill_range, cent=None):
-    fill_ib, fill_oob_r, fill_oob_b= fill_interval(tx_ib_plt, fill_range, cent), fill_interval(tx_oob_r_plt, fill_range), fill_interval(tx_oob_b_plt, fill_range) 
-    plotter(filt_name, tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt,oob_limit, fill_ib, fill_oob_r, fill_oob_b)
-    integrate(fill_ib, fill_oob_r, fill_oob_b)
 
 def combined(FILT1, FILT2, lamda1, lamda2, fill_width, cent=None):
     '''
@@ -94,7 +61,6 @@ def combined(FILT1, FILT2, lamda1, lamda2, fill_width, cent=None):
     - Returns > Integration ratios taken from integrate function
               > Plots
     '''
-
     concatenated_1= np.concatenate((FILT1[1], FILT1[0], FILT1[2]))
     x_new= np.arange(lamda1, lamda2, 0.01)#USER INPUT NEEDED
     fn= interp1d(concatenated_1[:,0], concatenated_1[:,1])
@@ -105,16 +71,14 @@ def combined(FILT1, FILT2, lamda1, lamda2, fill_width, cent=None):
         concatenated_2= np.concatenate((FILT2[0], FILT2[2]))
     fn= interp1d(concatenated_2[:,0], concatenated_2[:,1])
     y_new_2= fn(x_new)
-    
     final= np.column_stack((x_new, y_new_1*y_new_2))
-
     fill_ib= fill_interval(final, fill_width, cent)
     fill_oob_b= fill_interval(final, fill_width, FILT1[1][int(len(FILT1[1])/2)][0])
     fill_oob_r= fill_interval(final, fill_width, FILT1[2][int(len(FILT1[2])/2)][0])
     integrate(fill_ib, fill_oob_r, fill_oob_b)
     
     with plt.style.context(['science', 'nature']):
-        plt.figure(figsize=(6,4))
+        plt.figure(figsize=(6,4), dpi=300)
         plt.plot(final[:,0], final[:,1], color= 'black', label="Out of band")
         plt.fill_between(fill_ib[:,0],fill_ib[:,1], y2=0, linewidth=0, color='red', alpha=0.2)
         plt.fill_between(fill_oob_r[:,0], fill_oob_r[:,1], y2=0, linewidth=0, color='black', alpha=0.2)
@@ -124,14 +88,15 @@ def combined(FILT1, FILT2, lamda1, lamda2, fill_width, cent=None):
         plt.ylabel('Transmission \%', fontsize=12)
         plt.title(filt_name+'_out_of_band', fontsize=12)
         plt.grid(alpha=0.5)
-        plt.show()
+        if SAVE: plt.savefig(f'{project_path}products/combined/{filt_name}_combined.pdf')
+        if not SHOW: plt.close()
+        if SHOW: plt.show()
 
 if __name__=='__main__':
-    save_figure=False
+    SHOW, SAVE=False, True
     project_path= os.path.expanduser('~/Dropbox/Janmejoy_SUIT_Dropbox/science_filter_characterization/science_filter_charactrerization_scripts/science_filter_plots_project/') 
     folder= os.path.join(project_path, 'data/processed/')
     print("OOB %tx wrt IB")
-    #tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt
     
     ## NB1_2 ##
     filt_name="NB01_2"
@@ -146,7 +111,6 @@ if __name__=='__main__':
     oob_red=np.loadtxt(folder+'BB01/oob/BB1_3_oob_262.5_oob.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'BB01/oob/BB1_3_spatial_inband.txt', skiprows=1, usecols=(0,1))
     BB01= tx_gen(oob_blue, oob_red, ib, 210, 245, 190, 300)
-    
 
     ## BB3_3 ##
     filt_name="BB03_3"
@@ -236,7 +200,6 @@ if __name__=='__main__':
     oob=np.loadtxt(folder+'NB02/oob/NB2A_7_oob.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'NB02/oob/NB2A_7_inband.txt', skiprows=1, usecols=(0,1))
     NB02= tx_gen(oob, oob, ib, 275, 279, 255, 400)
-    #wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 0.01, 1, 277)
    
     #Combined Plots
     filt_name="NB01"; combined(NB01, BB01, int(NB01[1][0][0])+1, int(NB01[2][-1][0]), 5, 214)
@@ -249,15 +212,3 @@ if __name__=='__main__':
     filt_name="BB01"; combined(BB01, BB01, int(BB01[1][0][0])+1, int(BB01[2][-1][0]), 5, cent=None)
     filt_name="BB03"; combined(BB03, BP04, 293, int(BB03[2][-1][0]), 5, cent=None)
     #filt_name="BB02"; combined(BB02, BP04, 293, int(BB02[2][-1][0]), 5, cent=None)
-
-    '''
-
-    191, 256,
-    256, 298,
-    270, 288,
-    272, 289,
-    262, 304,
-    279, 321,
-    368, 408,
-    191, 284,
-    '''
