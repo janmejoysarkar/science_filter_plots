@@ -1,0 +1,14 @@
+Statistics for Filter combination bandpasses.
+Generated on Sep 25, 2024.
+Generated from relative transmission curves.
+
+OOB %tx wrt IB
+NB01     |oob_b% 0.29    |oob_r% 1.66
+NB02     |oob_b% 0.0     |oob_r% 0.0
+NB03     |oob_b% 0.03    |oob_r% 0.05
+NB04     |oob_b% 0.03    |oob_r% 0.02
+NB05     |oob_b% 0.0     |oob_r% 0.0
+NB06     |oob_b% 0.0     |oob_r% 0.01
+NB07     |oob_b% 0.01    |oob_r% 0.01
+BB01     |oob_b% 2.35    |oob_r% 0.0
+BB03     |oob_b% 0.09    |oob_r% 0.0

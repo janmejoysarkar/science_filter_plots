@@ -7,6 +7,8 @@ Created on 24 Sep 2024.
 - Created to make consolidated OOB vs IB plots for filter combinations.
 - This is to show that filter combinations give good throughput and sufficient
 out of band blockage.
+- This code converts percentage transmission in data to relative transmission
+  and performs all calculation.
 """
 
 import matplotlib.pyplot as plt
@@ -25,19 +27,20 @@ def tx_gen(oob_blue, oob_red, ib, ib_wl_mn, ib_wl_mx, oob_wl_mn, oob_wl_mx):
     oob_blue= oob_blue[np.logical_and(oob_blue[:,0]>oob_wl_mn, oob_blue[:,0]<ib_wl_mn)]
     oob_red= oob_red[np.logical_and(oob_red[:,0]>ib_wl_mx, oob_red[:,0]<oob_wl_mx)]
     ib=ib[np.logical_and(ib[:,0]>ib_wl_mn, ib[:,0]<ib_wl_mx)]
+    ib[:,1], oob_blue[:,1], oob_red[:,1] =ib[:,1]/100, oob_blue[:,1]/100, oob_red[:,1]/100 #Making relative tx from %tx values in data.
     return(ib, oob_blue, oob_red)
 
 def fill_interval(tx, fill_range, cent=None):
     '''
     picks the center of the tx spectrum and gives intervals within the +- fill range
-    
+    The effective fill width is 2*fill_range around center wavelength.
     Input: tx: np array. 2 col. wl and tx; fill_range: +- 
     of this value will be filled.
     Returns: The array (x and y) that has to be integrated 
     (for net tx measurement) or filled (in plots).
     '''
     if len(tx)!=0:
-        if cent==None: cent= tx[:,0][int(len(tx)/2)] #cent= tx[:,0][np.where (tx[:,1]==np.max(tx[:,1]))]
+        if cent==None: cent= tx[:,0][int(len(tx)/2)] 
         array=tx[(cent-fill_range<tx[:,0]) & (tx[:,0]<cent+fill_range)]
         #the array to be used for integration or shading the plot.
         return array
@@ -60,35 +63,46 @@ def combined(FILT1, FILT2, lamda1, lamda2, fill_width, cent=None):
     steps of 0.01 nm.
     - Returns > Integration ratios taken from integrate function
               > Plots
+    - FILT1, FILT2: Contains 3 arrays each for ib, oob_b and oob_r in this sequence.
+                    Contains wavelength and % tx.
+    - The % tx has to be converted to fraction transmission.
+    - Total tx %= (%tx1/100)*(%tx2/100)*100%
+
     '''
-    concatenated_1= np.concatenate((FILT1[1], FILT1[0], FILT1[2]))
+    concatenated_1= np.concatenate((FILT1[1], FILT1[0], FILT1[2])) #combined ib and oob plots for Filt 1
     x_new= np.arange(lamda1, lamda2, 0.01)#USER INPUT NEEDED
-    fn= interp1d(concatenated_1[:,0], concatenated_1[:,1])
-    y_new_1= fn(x_new)
-    if len(FILT2[1])!= 0:
-        concatenated_2= np.concatenate((FILT2[1], FILT2[0], FILT2[2]))
+    fn= interp1d(concatenated_1[:,0], concatenated_1[:,1]) #Interpolation for filt 1 combined plot
+    y_new_1= fn(x_new) #Interpolated filt 1 fractional tx
+    if len(FILT2[1])!= 0: #Condition for BP4 as it is missing OOB Blue data
+        concatenated_2= np.concatenate((FILT2[1], FILT2[0], FILT2[2])) # combined ib and oob plots for filt 2
     else:
         concatenated_2= np.concatenate((FILT2[0], FILT2[2]))
-    fn= interp1d(concatenated_2[:,0], concatenated_2[:,1])
-    y_new_2= fn(x_new)
-    final= np.column_stack((x_new, y_new_1*y_new_2))
-    fill_ib= fill_interval(final, fill_width, cent)
-    fill_oob_b= fill_interval(final, fill_width, FILT1[1][int(len(FILT1[1])/2)][0])
-    fill_oob_r= fill_interval(final, fill_width, FILT1[2][int(len(FILT1[2])/2)][0])
-    integrate(fill_ib, fill_oob_r, fill_oob_b)
+    fn= interp1d(concatenated_2[:,0], concatenated_2[:,1]) #Interpolation for filt 2 combined plot
+    y_new_2= fn(x_new) #Interpolated filt 2 fractional tx
     
+    final= np.column_stack((x_new, y_new_1*y_new_2)) #Wavelength vs filt1*filt2 tx% array
+    
+    fill_ib= fill_interval(final, fill_width, cent) #IB fill area
+    fill_oob_b= fill_interval(final, fill_width, FILT1[1][int(len(FILT1[1])/2)][0]) #OOB Blue fill area
+    fill_oob_r= fill_interval(final, fill_width, FILT1[2][int(len(FILT1[2])/2)][0]) #OOB Red fill area
+    integrate(fill_ib, fill_oob_r, fill_oob_b) #Integration across fill area
+    #Plotting 
     with plt.style.context(['science', 'nature']):
-        plt.figure(figsize=(6,4), dpi=300)
-        plt.plot(final[:,0], final[:,1], color= 'black', label="Out of band")
+        plt.figure(figsize=(6,4))
+        plt.plot(final[:,0], final[:,1], color= 'black', label='Out of Band')
+        plt.plot(final[:,0][(final[:,0]>FILT1[0][:,0][0]) & (final[:,0]<FILT1[0][:,0][-1])], final[:,1]
+                 [(final[:,0]>FILT1[0][:,0][0]) & (final[:,0]<FILT1[0][:,0][-1])], color= 'red', label='Inband')
         plt.fill_between(fill_ib[:,0],fill_ib[:,1], y2=0, linewidth=0, color='red', alpha=0.2)
         plt.fill_between(fill_oob_r[:,0], fill_oob_r[:,1], y2=0, linewidth=0, color='black', alpha=0.2)
         plt.fill_between(fill_oob_b[:,0], fill_oob_b[:,1], y2=0, linewidth=0, color='black', alpha=0.2)
         plt.yscale('log')
         plt.xlabel('Wavelength (nm)', fontsize=12)
-        plt.ylabel('Transmission \%', fontsize=12)
-        plt.title(filt_name+'_out_of_band', fontsize=12)
+        plt.ylabel('Relative Transmission', fontsize=12)
+        plt.title(filt_name+'_combination', fontsize=12)
+        plt.tick_params(axis='both', which='major', labelsize=12)
         plt.grid(alpha=0.5)
-        if SAVE: plt.savefig(f'{project_path}products/combined/{filt_name}_combined.pdf')
+        plt.legend(fontsize=12)
+        if SAVE: plt.savefig(f'{project_path}products/combined/{filt_name}_combined.pdf', dpi=300)
         if not SHOW: plt.close()
         if SHOW: plt.show()
 
@@ -123,7 +137,7 @@ if __name__=='__main__':
     filt_name="BB02_3"
     ib1= np.loadtxt(folder+'BB02/oob/BB2_3_spatial_255nm_inband.txt', skiprows=1, usecols= (0,1))
     ib2= np.loadtxt(folder+'BB02/oob/BB2_3_spatial_290nm_inband.txt', skiprows=1, usecols= (0,1))
-    ib2=ib2[np.logical_not(ib2[:,0]<276)]
+    ib2=ib2[np.logical_not(ib2[:,0]<276.8)]
     ib= np.concatenate((ib1, ib2))
     oob_blue=np.loadtxt(folder+'BB02/oob/BB2_3_oob_229nm_oob.txt', skiprows=1, usecols= (0,1))
     oob_red=np.loadtxt(folder+'BB02/oob/BB2_3_oob_323nm_oob.txt', skiprows=1, usecols= (0,1))
@@ -142,15 +156,15 @@ if __name__=='__main__':
     oob_red=np.loadtxt(folder+'BP02/oob/BP2_8_290-310_OOB_oob.txt', skiprows=1, usecols= (0,1))
     ib1= np.loadtxt(folder+'BP02/oob/BP2_8_262-282_inband.txt', skiprows=1, usecols= (0,1))
     ib2= np.loadtxt(folder+'BP02/oob/BP2_8_278-297_inband.txt', skiprows=1, usecols= (0,1))
-    ib=np.concatenate((ib1[:-300], ib2))
+    ib=np.concatenate((ib1[:-300], ib2[90:]))
     BP02= tx_gen(oob_blue, oob_red, ib, 268, 290, 190, 340)
-
+    
     ## BP4_2 ##
     filt_name="BP04_2"
     ib1= np.loadtxt(folder+'BP04/oob/BP4_2_280_inband.txt', skiprows=1, usecols= (0,1))
     ib2= np.loadtxt(folder+'BP04/oob/BP4_2_320_inband.txt', skiprows=1, usecols= (0,1))
     ib3= np.loadtxt(folder+'BP04/oob/BP4_2_360_inband.txt', skiprows=1, usecols= (0,1))
-    ib=np.concatenate((ib1, ib2, ib3))
+    ib=np.concatenate((ib1[:-50], ib2[90:-50], ib3[67:]))
     oob_red=np.loadtxt(folder+'BP04/oob/BP4_2_390_OOB_oob.txt', skiprows=1, usecols=(0,1))
     oob_blue=np.column_stack((np.zeros(10), np.zeros(10))) #Dummy Value
     BP04= tx_gen(oob_blue, oob_red, ib, 292, 369, 200, 450)
@@ -160,10 +174,10 @@ if __name__=='__main__':
     ib1= np.loadtxt(folder+'BP03/oob/BP3_2_spatial_310_inband.txt', skiprows=1, usecols= (0,1))
     ib2= np.loadtxt(folder+'BP03/oob/BP3_2_spatial_350_inband.txt', skiprows=1, usecols= (0,1))
     ib3= np.loadtxt(folder+'BP03/oob/BP3_2_spatial_390_inband.txt', skiprows=1, usecols= (0,1))
-    ib=np.concatenate((ib1, ib2, ib3))
+    ib=np.concatenate((ib1[ib1[:,0]<330], ib2[(ib2[:,0]>330) & (ib2[:,0]<370)], ib3[ib3[:,0]>370]))
     oob_blue=np.loadtxt(folder+'BP03/oob/BP3_2_oob_269_oob.txt', skiprows=1, usecols= (0,1))
     oob_red=np.loadtxt(folder+'BP03/oob/BP3_2_oob_427_oob.txt', skiprows=1, usecols= (0,1))
-    BP03= tx_gen(oob_blue, oob_red, ib, 292, 407, 190, 450)
+    BP03= tx_gen(oob_blue, oob_red, ib, 292, 407.5, 190, 450)
 
     ## NB7_2 ##
     filt_name="NB07_2"
@@ -209,6 +223,6 @@ if __name__=='__main__':
     filt_name="NB05"; combined(NB05, BP02, int(NB05[1][0][0])+1, int(NB05[2][-1][0]), 1, 283.54)
     filt_name="NB06"; combined(NB06, BP03, int(NB06[1][0][0])+1, int(NB06[2][-1][0]), 1, 300)
     filt_name="NB07"; combined(NB07, BP03, int(NB07[1][0][0])+1, int(NB07[2][-1][0]), 1, 388)
-    filt_name="BB01"; combined(BB01, BB01, int(BB01[1][0][0])+1, int(BB01[2][-1][0]), 5, cent=None)
-    filt_name="BB03"; combined(BB03, BP04, 293, int(BB03[2][-1][0]), 5, cent=None)
+    filt_name="BB01"; combined(BB01, BB01, int(BB01[1][0][0])+1, int(BB01[2][-1][0]), 5, BB01[0][int(len(BB01[0])/2)][0])
+    filt_name="BB03"; combined(BB03, BP04, 293, int(BB03[2][-1][0]), 5, BB03[0][int(len(BB03[0])/2)][0])
     #filt_name="BB02"; combined(BB02, BP04, 293, int(BB02[2][-1][0]), 5, cent=None)
