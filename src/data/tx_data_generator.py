@@ -20,6 +20,10 @@ Created on Thu May  2 14:34:56 2024
 measurements were done at the same temperature at which SUIT FW Mount is
 functioning- 21 deg C.
 
+2024-09-26: Modified to output relative transmission instead of %tx.
+            Changed file reading pattern.
+            All processed files replaced with relative tx data.
+
 @author: janmejoyarch
 """
 import glob, os
@@ -48,9 +52,9 @@ def avg_normalize(lis):
 
 def tx_percent(flt, dark, source, dark_source):
     '''
-    Returns transmission %
+    Returns relative transmission
     '''
-    return (flt-dark)*100/(source-dark_source)
+    return (flt-dark)/(source-dark_source)
     
 def wl_calib(wvlen, filt, grating):
     '''
@@ -87,29 +91,36 @@ def plot(x,y_ls, lo=None, hi=None):
     for y in y_ls:
         plt.plot(x[lo:hi],y[lo:hi]) if lo is not None else plt.plot(x,y)
     plt.grid()
+    plt.show()
+
      
 if __name__=='__main__':
     #Bash for generating folder list
     #for fld in */tilt/* ; do echo \"$(echo $fld | cut -d "/" -f3)\",; done
-    for FLD in ["NB1_2",
-                "NB2A_7",
-                "NB3_2",
-                "NB4_2",
-                "NB5_3",
-                "NB6_1",
-                "NB7_2"]:
+    #for FLD in ["NB1_2",
+    #            "NB2A_7",
+    #            "NB3_2",
+    #            "NB4_2",
+    #            "NB5_3",
+    #            "NB6_1",
+    #            "NB7_2"]:
         
-        #####USER-DEFINED###
-        TYP= 'tilt' #type of data
-        SAVE= True
-        project_path= os.path.expanduser('~/Dropbox/Janmejoy_SUIT_Dropbox/science_filter_characterization/science_filter_charactrerization_scripts/science_filter_plots_project/')
-        ####################
+    #####USER-DEFINED###
+    TYP= 'tilt' #type of data {'spatial', 'oob', 'tilt'}
+    SAVE= True
+    PLOT= False
+    project_path= os.path.expanduser('~/Dropbox/Janmejoy_SUIT_Dropbox/science_filter_characterization/science_filter_charactrerization_scripts/science_filter_plots_project/')
+    ####################
+   
+    #    FLD= os.path.basename(path)
+    #    path_list= sorted(glob.glob(os.path.join(project_path+f'data/raw/*/{TYP}/*')))
+    #    filter_path= [path for path in path_list if path.endswith(FLD)][0]
         
-        path_list= sorted(glob.glob(os.path.join(project_path+f'data/raw/*/{TYP}/*')))
-        filter_path= [path for path in path_list if path.endswith(FLD)][0]
+
+    for filter_path in sorted(glob.glob(f'{project_path}/data/raw/*/{TYP}/*')):
         filt_name= filter_path.split('raw/')[1][:4]
         sav_path= os.path.join(project_path, 'data/processed/', filt_name, TYP)
-        
+        FLD= os.path.basename(filter_path)
         if TYP=='spatial':
             dark_flt=avg_normalize(glob.glob(os.path.join(filter_path,'dark_flt*.asc')))
             dark_src= avg_normalize(glob.glob(os.path.join(filter_path,'dark_src*.asc')))
@@ -127,10 +138,10 @@ if __name__=='__main__':
             tx_b= tx_percent(flt_b[1], dark_flt[1], src[1], dark_src[1])
             wl=wl_calib(src[0], filt_name, src[2])
             stack= np.array([wl, tx_c, tx_l, tx_r, tx_t, tx_b]).T
-            plot(stack[:,0], [tx_c, tx_l, tx_r, tx_t, tx_b], lo=900, hi=1300)
+            if PLOT: plot(stack[:,0], [tx_c, tx_l, tx_r, tx_t, tx_b], lo=900, hi=1300)
             if SAVE: 
-                np.savetxt(os.path.join(sav_path, f'{FLD}_spatial.txt'), stack, header='wl center%tx left%tx right%tx top%tx bottom%tx', fmt= '% 1.5f')
-                print('Spatial %tx files generated for ', FLD)
+                np.savetxt(os.path.join(sav_path, f'{FLD}_spatial.txt'), stack, header='wl center_tx left_tx right_tx top_tx bottom_tx', fmt='%.7f')
+                print('Spatial tx files generated for ', FLD)
             
         elif TYP=='oob':
             src= avg_normalize(glob.glob(os.path.join(filter_path,'src*.asc')))
@@ -143,21 +154,21 @@ if __name__=='__main__':
                 dark_oob= avg_normalize(glob.glob(os.path.join(filter_path,'dark_oob*.asc')))
                 #Tx percentages
                 tx_oob= tx_percent(oob[1], dark_oob[1], src[1], dark_src[1])
-                plot(wl, [tx_oob])
+                if PLOT: plot(wl, [tx_oob])
                 stack=np.array([wl, tx_oob]).T
                 if SAVE: 
-                    np.savetxt(os.path.join(sav_path, f'{FLD}_oob.txt'), stack, header='wl \t %tx', fmt= '% 1.5f')
+                    np.savetxt(os.path.join(sav_path, f'{FLD}_oob.txt'), stack, header='wl \t tx', fmt='%.7f')
                 
             flt_c_files= glob.glob(os.path.join(filter_path,'flt_c*.asc'))
             if (len(flt_c_files) != 0):
                 flt_c= avg_normalize(flt_c_files)
                 dark_flt=avg_normalize(glob.glob(os.path.join(filter_path,'dark_flt*.asc')))
                 tx_c= tx_percent(flt_c[1], dark_flt[1], src[1], dark_src[1])
-                plot(wl, [tx_c])
+                if PLOT: plot(wl, [tx_c])
                 stack= np.array([wl, tx_c]).T    
                 if SAVE:
-                    np.savetxt(os.path.join(sav_path, f'{FLD}_inband.txt'), stack, header='wl \t %tx', fmt= '% 1.5f')
-                    print('OOB %tx files generated for ', FLD)
+                    np.savetxt(os.path.join(sav_path, f'{FLD}_inband.txt'), stack, header='wl \t tx', fmt='%.7f')
+                    print('OOB tx files generated for ', FLD)
     
         elif TYP=='tilt':
             dark_src= avg_normalize(glob.glob(os.path.join(filter_path,'drk_src*.asc')))
@@ -172,12 +183,9 @@ if __name__=='__main__':
             wl= wl_calib(src[0], filt_name, src[2])
             tilt_tx_ls.insert(0, wl)
             stack= np.array(tilt_tx_ls).T #.T makes transpose. To make the data in columns.
-            plot(stack[:,0], [stack[:,i] for i in range (7,14)], lo=970, hi=1100)
+            if PLOT: plot(stack[:,0], [stack[:,i] for i in range (7,14)], lo=970, hi=1100)
     
-            if SAVE: 
-                np.savetxt(os.path.join(sav_path, f'{FLD}_tilt.txt'), stack, header='wl -6deg%tx -5deg%tx -4deg%tx -3deg%tx -2deg%tx -1deg%tx 0deg%tx 1deg%tx 2deg%tx 3deg%tx 4deg%tx 5deg tx 6deg%tx', fmt= '% 1.5f')
-                print('Tilt %tx files generated for ', FLD)
-    
-            
-    
-
+            if SAVE:
+                header='wl -6deg_tx -5deg_tx -4deg_tx -3deg_tx -2deg_tx -1deg_tx 0deg_tx 1deg_tx 2deg_tx 3deg_tx 4deg_tx 5deg tx 6deg_tx'
+                np.savetxt(os.path.join(sav_path, f'{FLD}_tilt.txt'), stack, header=header, fmt='%.7f')
+                print('Tilt tx files generated for ', FLD)

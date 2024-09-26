@@ -36,3 +36,4 @@ measured_2400= np.array([253.77,296.84,302.26,313.27,334.23,365.08,404.72,407.84
 #data from 2022-04-19_HG2_calibsource_2400lpmm
 
 difference(theoretical_2400, measured_2400)
+difference(theoretical_1200, measured_1200)
