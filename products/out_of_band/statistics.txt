@@ -1,4 +1,4 @@
-Generated on 2024-09-27
+Generated on 2024-09-26
 Generated from relative transmission data.
 OOB %tx wrt IB
 NB01_2   |oob_b% 2.32    |oob_r% 5.44

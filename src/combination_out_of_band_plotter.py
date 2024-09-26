@@ -9,6 +9,8 @@ Created on 24 Sep 2024.
 out of band blockage.
 - This code converts percentage transmission in data to relative transmission
   and performs all calculation.
+
+2024-09-26: Modified to use relative transmission data instead of %tx data.
 """
 
 import matplotlib.pyplot as plt
@@ -27,7 +29,7 @@ def tx_gen(oob_blue, oob_red, ib, ib_wl_mn, ib_wl_mx, oob_wl_mn, oob_wl_mx):
     oob_blue= oob_blue[np.logical_and(oob_blue[:,0]>oob_wl_mn, oob_blue[:,0]<ib_wl_mn)]
     oob_red= oob_red[np.logical_and(oob_red[:,0]>ib_wl_mx, oob_red[:,0]<oob_wl_mx)]
     ib=ib[np.logical_and(ib[:,0]>ib_wl_mn, ib[:,0]<ib_wl_mx)]
-    ib[:,1], oob_blue[:,1], oob_red[:,1] =ib[:,1]/100, oob_blue[:,1]/100, oob_red[:,1]/100 #Making relative tx from %tx values in data.
+    ib[:,1], oob_blue[:,1], oob_red[:,1] =ib[:,1], oob_blue[:,1], oob_red[:,1]
     return(ib, oob_blue, oob_red)
 
 def fill_interval(tx, fill_range, cent=None):
@@ -54,7 +56,7 @@ def integrate(fill_ib, fill_oob_r, fill_oob_b):
         oob_blue_percent= oob_blue_integrate*100/ib_integrate
     else:
         oob_blue_percent= -200
-    print(f"{filt_name}\t |oob_b% {round(oob_blue_percent,2)}\t |oob_r% {round(oob_red_percent,2)}")
+    print(f"{filt_name}\t |oob_b% {round(oob_blue_percent,4)}\t |oob_r% {round(oob_red_percent,4)}")
 
 def combined(FILT1, FILT2, lamda1, lamda2, fill_width, cent=None):
     '''
@@ -107,7 +109,7 @@ def combined(FILT1, FILT2, lamda1, lamda2, fill_width, cent=None):
         if SHOW: plt.show()
 
 if __name__=='__main__':
-    SHOW, SAVE=False, True
+    SHOW, SAVE= False, True
     project_path= os.path.expanduser('~/Dropbox/Janmejoy_SUIT_Dropbox/science_filter_characterization/science_filter_charactrerization_scripts/science_filter_plots_project/') 
     folder= os.path.join(project_path, 'data/processed/')
     print("OOB %tx wrt IB")

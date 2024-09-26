@@ -7,13 +7,11 @@ Created on Wed Nov  8 14:48:31 2023
 
 -Created to plot the OOB tx of science filters with inband at 0deg angle of
 incidence.
--Data is in wl vs tx% form.
+
+-2023-11-15
+-2023-12-15
 -2024-04-23: Modification made to project form.
--2024-09-25: Code changed to use relative transmission instead of %tx.
-             %tx from the data is converted to relative transmission.  
-Modification log
---Nov 15 2023
---Dec 15 2023
+-2024-09-26: Code changed to use relative transmission instead of %tx.
 """
 
 import matplotlib.pyplot as plt
@@ -33,7 +31,7 @@ def tx_gen(oob_blue, oob_red, ib, ib_wl_mn, ib_wl_mx, oob_wl_mn, oob_wl_mx):
     oob_blue= oob_blue[np.logical_and(oob_blue[:,0]>oob_wl_mn, oob_blue[:,0]<ib_wl_mn)]
     oob_red= oob_red[np.logical_and(oob_red[:,0]>ib_wl_mx, oob_red[:,0]<oob_wl_mx)]
     ib=ib[np.logical_and(ib[:,0]>ib_wl_mn, ib[:,0]<ib_wl_mx)]
-    ib[:,1], oob_blue[:,1], oob_red[:,1] =ib[:,1]/100, oob_blue[:,1]/100, oob_red[:,1]/100 #converting to relative tx 
+    ib[:,1], oob_blue[:,1], oob_red[:,1] =ib[:,1], oob_blue[:,1], oob_red[:,1]  
     return(ib, oob_blue, oob_red)
 
 def plotter(filt_name, ib, oob_blue, oob_red, limit, fill_ib, fill_oob_r, fill_oob_b):  
@@ -75,6 +73,10 @@ def fill_interval(tx, fill_range, cent=None):
         return array
 
 def integrate(fill_ib, fill_oob_r, fill_oob_b):
+    '''
+    Integrates the curve under the fill regions.
+    Compares the integrated out of band flux with inband flux.
+    '''
     ib_integrate= simpson(fill_ib[:,1], x=fill_ib[:,0])
     oob_red_integrate= simpson(fill_oob_r[:,1], x=fill_oob_r[:,0])
     oob_red_percent= oob_red_integrate*100/ib_integrate
