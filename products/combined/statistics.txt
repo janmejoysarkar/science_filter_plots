@@ -12,3 +12,4 @@ NB06     |oob_b% 0.0001  |oob_r% 0.0104
 NB07     |oob_b% 0.0107  |oob_r% 0.0071
 BB01     |oob_b% 2.3489  |oob_r% 0.0013
 BB03     |oob_b% 0.0945  |oob_r% 0.0008
+BB02     |oob_b% -200    |oob_r% 0.0722
