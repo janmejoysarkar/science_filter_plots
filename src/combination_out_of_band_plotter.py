@@ -43,7 +43,7 @@ def fill_interval(tx, fill_range, cent=None):
     '''
     if len(tx)!=0:
         if cent==None: cent= tx[:,0][int(len(tx)/2)] 
-        array=tx[(cent-fill_range<tx[:,0]) & (tx[:,0]<cent+fill_range)]
+        array=tx[(tx[:,0]>cent-fill_range) & (tx[:,0]<cent+fill_range)]
         #the array to be used for integration or shading the plot.
         return array
 
@@ -61,8 +61,8 @@ def integrate(fill_ib, fill_oob_r, fill_oob_b):
 def combined(FILT1, FILT2, lamda1, lamda2, fill_width, cent=None):
     '''
     - Concatenates OOB and IB profiles to make it into one curve.
-    - Performs linear interpolation to get the interpolated graph in
-    steps of 0.01 nm.
+    - lamda1, lamda2: Performs linear interpolation to get the interpolated graph in 
+                      steps of 0.01 nm starting from lamda1 to lamda2.
     - Returns > Integration ratios taken from integrate function
               > Plots
     - FILT1, FILT2: Contains 3 arrays each for ib, oob_b and oob_r in this sequence.
@@ -85,7 +85,8 @@ def combined(FILT1, FILT2, lamda1, lamda2, fill_width, cent=None):
     final= np.column_stack((x_new, y_new_1*y_new_2)) #Wavelength vs filt1*filt2 tx% array
     
     fill_ib= fill_interval(final, fill_width, cent) #IB fill area
-    fill_oob_b= fill_interval(final, fill_width, FILT1[1][int(len(FILT1[1])/2)][0]) #OOB Blue fill area
+    if len(FILT1[1])!=0:
+        fill_oob_b= fill_interval(final, fill_width, FILT1[1][int(len(FILT1[1])/2)][0]) #OOB Blue fill area
     fill_oob_r= fill_interval(final, fill_width, FILT1[2][int(len(FILT1[2])/2)][0]) #OOB Red fill area
     integrate(fill_ib, fill_oob_r, fill_oob_b) #Integration across fill area
     #Plotting 
@@ -96,8 +97,9 @@ def combined(FILT1, FILT2, lamda1, lamda2, fill_width, cent=None):
                  [(final[:,0]>FILT1[0][:,0][0]) & (final[:,0]<FILT1[0][:,0][-1])], color= 'red', label='Inband')
         plt.fill_between(fill_ib[:,0],fill_ib[:,1], y2=0, linewidth=0, color='red', alpha=0.2)
         plt.fill_between(fill_oob_r[:,0], fill_oob_r[:,1], y2=0, linewidth=0, color='black', alpha=0.2)
-        plt.fill_between(fill_oob_b[:,0], fill_oob_b[:,1], y2=0, linewidth=0, color='black', alpha=0.2)
-        plt.yscale('log')
+        if len(FILT1[1])!=0:
+            plt.fill_between(fill_oob_b[:,0], fill_oob_b[:,1], y2=0, linewidth=0, color='black', alpha=0.2)
+        #plt.yscale('log')
         plt.xlabel('Wavelength (nm)', fontsize=12)
         plt.ylabel('Relative Transmission', fontsize=12)
         plt.title(filt_name+'_combination', fontsize=12)
@@ -109,7 +111,7 @@ def combined(FILT1, FILT2, lamda1, lamda2, fill_width, cent=None):
         if SHOW: plt.show()
 
 if __name__=='__main__':
-    SHOW, SAVE= False, True
+    SHOW, SAVE= True, False
     project_path= os.path.expanduser('~/Dropbox/Janmejoy_SUIT_Dropbox/science_filter_characterization/science_filter_charactrerization_scripts/science_filter_plots_project/') 
     folder= os.path.join(project_path, 'data/processed/')
     print("OOB %tx wrt IB")
@@ -227,4 +229,4 @@ if __name__=='__main__':
     filt_name="NB07"; combined(NB07, BP03, int(NB07[1][0][0])+1, int(NB07[2][-1][0]), 1, 388)
     filt_name="BB01"; combined(BB01, BB01, int(BB01[1][0][0])+1, int(BB01[2][-1][0]), 5, BB01[0][int(len(BB01[0])/2)][0])
     filt_name="BB03"; combined(BB03, BP04, 293, int(BB03[2][-1][0]), 5, BB03[0][int(len(BB03[0])/2)][0])
-    #filt_name="BB02"; combined(BB02, BP04, 293, int(BB02[2][-1][0]), 5, cent=None)
+    filt_name="BB02"; combined((BB02[0][2250:],np.empty(shape=(0,2)), BB02[2]), BP04, 293, int(BB02[2][-1][0]), 5, cent=None)
