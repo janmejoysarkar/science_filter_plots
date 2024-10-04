@@ -45,9 +45,9 @@ def plotter(filt_name, ib, oob_blue, oob_red, limit, fill_ib, fill_oob_r, fill_o
         if len(oob_blue != 0):
             plt.fill_between(fill_oob_b[:,0], fill_oob_b[:,1], y2=0, linewidth=0, color='black', alpha=0.2)
         plt.tick_params(axis='both', which='major', labelsize=12)
-        #plt.yscale('log')
+        plt.yscale('log')
         plt.xlabel('Wavelength (nm)', fontsize=12)
-        plt.ylabel('Relative Transmission', fontsize=12)
+        plt.ylabel('Relative Transmission (log scale)', fontsize=12)
         #plt.axhline(y=limit, color='#2ca02c', label= "Acceptable limit")
         plt.title(filt_name+'_out_of_band', fontsize=12)
         plt.legend(fontsize=12)
