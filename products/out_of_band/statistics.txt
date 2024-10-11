@@ -1,16 +1,18 @@
-Generated on 2024-09-26
+Generated on 2024-10-11
 Generated from relative transmission data.
 OOB %tx wrt IB
-NB01_2   |oob_b% 2.32    |oob_r% 5.44
-BB03_3   |oob_b% 0.11    |oob_r% 0.31
-BB02_3   |oob_b% 0.86    |oob_r% 0.05
-BB01_3   |oob_b% 13.36   |oob_r% 0.34
-BP02_6   |oob_b% 0.09    |oob_r% 0.03
-BP04_2   |oob_b% -200    |oob_r% 0.16
-BP03_2   |oob_b% 0.32    |oob_r% 0.23
-NB07_2   |oob_b% 0.01    |oob_r% 0.01
-NB06_1   |oob_b% 0.02    |oob_r% 0.01
-NB05_3   |oob_b% 0.03    |oob_r% 0.01
-NB04_2   |oob_b% 0.03    |oob_r% 0.03
-NB03_2   |oob_b% 0.03    |oob_r% 0.04
-NB02A_7  |oob_b% 0.04    |oob_r% 0.01
+NB01_2   |oob_b% 2.32e+00        |oob_r% 5.44e+00
+BB03_3   |oob_b% 1.09e-01        |oob_r% 3.08e-01
+BB02_3   |oob_b% 8.62e-01        |oob_r% 4.85e-02
+BB01_3   |oob_b% 1.34e+01        |oob_r% 3.41e-01
+BP02_6   |oob_b% 8.65e-02        |oob_r% 2.65e-02
+BP04_2   |oob_b% -2.00e+02       |oob_r% 1.61e-01
+BP03_2   |oob_b% 3.23e-01        |oob_r% 2.26e-01
+NB07_2   |oob_b% 1.03e-02        |oob_r% 7.79e-03
+NB06_1   |oob_b% 1.93e-02        |oob_r% 9.13e-03
+NB05_3   |oob_b% 2.91e-02        |oob_r% 1.25e-02
+NB04_2   |oob_b% 3.30e-02        |oob_r% 3.19e-02
+NB03_2   |oob_b% 3.20e-02        |oob_r% 4.23e-02
+NB02A_7  |oob_b% 3.50e-02        |oob_r% 1.30e-02
+
+

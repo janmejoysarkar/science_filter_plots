@@ -33,6 +33,8 @@ def plotter (filter_name, input_data, wl_mn, wl_mx, save_plot=None):
         plt.legend(["Center", "Left", "Right", "Top", "Bottom"], fontsize=12)
         plt.xlabel("Wavelength (nm)", fontsize=12)
         plt.ylabel("Relative Transmission", fontsize=12)
+        plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
+        plt.gca().yaxis.get_offset_text().set_size(12)
         plt.grid(alpha=0.5)
         if save_plot==True: plt.savefig(os.path.join(folder,f'products/spatial/{filter_name}_spatial.pdf'), dpi=300)
         if SHOW:plt.show()
@@ -57,6 +59,8 @@ def multiplotter (filter_name, input_data_ls, wl_mn_ls, wl_mx_ls, save_plot=None
         plt.legend(["Center", "Left", "Right", "Top", "Bottom"], fontsize=12)
         plt.xlabel("Wavelength (nm)", fontsize=12)
         plt.ylabel("Relative Transmission", fontsize=12)
+        plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
+        plt.gca().yaxis.get_offset_text().set_size(12)
         plt.grid(alpha=0.5)
         if save_plot==True: plt.savefig(os.path.join(folder,f'products/spatial/{filter_name}_spatial.pdf'), dpi=300)
         if SHOW:plt.show()
@@ -81,29 +85,32 @@ def deviation(filter_name, input_data, wl_min, wl_mx):
         wl_mx=wl_interp[np.where(tx_interp==tx_mx)][0]
         wl_half= wl_interp[np.where(tx_interp>=tx_mx/2)]
         fwhm= round(wl_half[-1]-wl_half[0], 3)
-        print(pos_list[i],"\t", round(wl_mx, 3), "\t", fwhm) #"Position \t Max_tx_wl \t FWHM(nm)"
-        plt.figure(pos_list[i])
-        plt.plot(wl_interp, tx_interp)
-        plt.axvline(wl_mx, color='black')
-        plt.axvline(wl_half[0], color='red'); plt.axvline(wl_half[-1], color='red')
-        plt.title(pos_list[i]+filter_name)
-        plt.xlabel("Wavelength (nm)")
-        plt.ylabel("Relative Transmission")
-        plt.grid()
-        if SHOW:plt.show()
-        if not SHOW:plt.close()
+        #print(pos_list[i],"\t", round(wl_mx, 3), "\t", fwhm) #"Position \t Max_tx_wl \t FWHM(nm)"
+        #plt.figure(pos_list[i])
+        #plt.plot(wl_interp, tx_interp)
+        #plt.axvline(wl_mx, color='black')
+        #plt.axvline(wl_half[0], color='red'); plt.axvline(wl_half[-1], color='red')
+        #plt.title(pos_list[i]+filter_name)
+        #plt.xlabel("Wavelength (nm)")
+        #plt.ylabel("Relative Transmission")
+        #plt.grid()
+        #if SHOW:plt.show()
+        #if not SHOW:plt.close()
         i=i+1
         wl_mx_ls.append(wl_mx)
         fwhm_ls.append(fwhm)
         tx_mx_ls.append(tx_mx)
     
-    print("tx_mx-- Mean, Std, %dev:", round(np.mean(tx_mx_ls), 4), round(np.std(tx_mx_ls), 4), round(np.std(tx_mx_ls)*100/np.mean(tx_mx_ls), 4))        
-    print("mx_wl-- Mean, Std, %dev:", round(np.mean(wl_mx_ls),4), round(np.std(wl_mx_ls), 4), round(np.std(wl_mx_ls)*100/np.mean(wl_mx_ls), 4))       
-    print("fwhm-- Mean, Std, %dev:", round(np.mean(fwhm_ls), 4), round(np.std(fwhm_ls), 4), round(np.std(fwhm_ls)*100/np.mean(fwhm_ls), 4))        
+    #print("tx_mx-- Mean, Std, %dev:", round(np.mean(tx_mx_ls), 4), round(np.std(tx_mx_ls), 4), round(np.std(tx_mx_ls)*100/np.mean(tx_mx_ls), 4))        
+    #print("mx_wl-- Mean, Std, %dev:", round(np.mean(wl_mx_ls),4), round(np.std(wl_mx_ls), 4), round(np.std(wl_mx_ls)*100/np.mean(wl_mx_ls), 4))       
+    #print("fwhm-- Mean, Std, %dev:", round(np.mean(fwhm_ls), 4), round(np.std(fwhm_ls), 4), round(np.std(fwhm_ls)*100/np.mean(fwhm_ls), 4))        
+    print("tx_mx-- Mean, Std, %dev:", round(np.mean(tx_mx_ls), 4), f"{(np.std(tx_mx_ls)):.2e}", f"{(np.std(tx_mx_ls)*100/np.mean(tx_mx_ls)):.2e}")        
+    print("mx_wl-- Mean, Std, %dev:", round(np.mean(wl_mx_ls),4), f"{(np.std(wl_mx_ls)):.2e}", f"{(np.std(wl_mx_ls)*100/np.mean(wl_mx_ls)):.2e}")       
+    print("fwhm-- Mean, Std, %dev:", round(np.mean(fwhm_ls), 4), f"{(np.std(fwhm_ls)):.2e}", f"{(np.std(fwhm_ls)*100/np.mean(fwhm_ls)):.2e}")        
     
 
 if __name__=='__main__':
-    SHOW, save_plot=False, True 
+    SHOW, save_plot=True, True
     ### Plotting & deviation analysis ###
     folder=os.path.expanduser('~/Dropbox/Janmejoy_SUIT_Dropbox/science_filter_characterization/science_filter_charactrerization_scripts/science_filter_plots_project/')
     
@@ -149,13 +156,6 @@ if __name__=='__main__':
     plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot)
     deviation(ftr_name, np.loadtxt(file, skiprows=1),  wl_mn, wl_mx)
     
-    # NB8_1 #
-    ftr_name= "NB08"
-    file= f'{folder}data/processed/{ftr_name}/spatial/NB8_1_spatial.txt' 
-    wl_mn, wl_mx= 396.4, 397.3
-    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot)
-    deviation(ftr_name, np.loadtxt(file, skiprows=1),  wl_mn, wl_mx)
-    
     # NB8_2 #
     ftr_name= "NB08"
     file= f'{folder}data/processed/{ftr_name}/spatial/NB8_2_1200lpmm_500blaze_spatial.txt' 
@@ -163,6 +163,13 @@ if __name__=='__main__':
     plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot)
     deviation(ftr_name, np.loadtxt(file, skiprows=1),  wl_mn, wl_mx)
     
+    # NB8_1 #
+    ftr_name= "NB08"
+    file= f'{folder}data/processed/{ftr_name}/spatial/NB8_1_spatial.txt' 
+    wl_mn, wl_mx= 396.4, 397.3
+    plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot)
+    deviation(ftr_name, np.loadtxt(file, skiprows=1),  wl_mn, wl_mx)
+        
     # BB1_5 #
     ftr_name= "BB01"
     file= f'{folder}data/processed/{ftr_name}/spatial/BB1_5_inband_spatial.txt' 
@@ -194,7 +201,7 @@ if __name__=='__main__':
     file1= f'{folder}data/processed/{ftr_name}/spatial/BB2_3_spatial_255nm_spatial.txt' 
     wl_mn1, wl_mx1= 200, 400
     file2= f'{folder}data/processed/{ftr_name}/spatial/BB2_3_spatial_290nm_spatial.txt' 
-    wl_mn2, wl_mx2=  276, 400
+    wl_mn2, wl_mx2=  277, 400
     multiplotter (ftr_name, [np.loadtxt(file1, skiprows=1), np.loadtxt(file2, skiprows=1)], [wl_mn1, wl_mn2], [wl_mx1, wl_mx2], save_plot)
     
     # BP2_8 #
@@ -210,9 +217,9 @@ if __name__=='__main__':
     file1= f'{folder}data/processed/{ftr_name}/spatial/BP3_2_spatial_310_spatial.txt' 
     wl_mn1, wl_mx1= 200, 400
     file2= f'{folder}data/processed/{ftr_name}/spatial/BP3_2_spatial_350_spatial.txt' 
-    wl_mn2, wl_mx2= 200, 400
+    wl_mn2, wl_mx2= 331.3, 400
     file3= f'{folder}data/processed/{ftr_name}/spatial/BP3_2_spatial_390_spatial.txt'
-    wl_mn3, wl_mx3= 200, 500
+    wl_mn3, wl_mx3= 371, 500
     multiplotter (ftr_name, [np.loadtxt(file1, skiprows=1), np.loadtxt(file2, skiprows=1), np.loadtxt(file3, skiprows=1)], 
                   [wl_mn1, wl_mn2, wl_mn3], [wl_mx1, wl_mx2, wl_mx3], save_plot)
 
@@ -221,8 +228,8 @@ if __name__=='__main__':
     file1= f'{folder}data/processed/{ftr_name}/spatial/BP4_4_spatial_270_spatial.txt' 
     wl_mn1, wl_mx1= 200, 400
     file2= f'{folder}data/processed/{ftr_name}/spatial/BP4_4_spatial_310_spatial.txt' 
-    wl_mn2, wl_mx2= 200, 400
+    wl_mn2, wl_mx2= 291.6, 400
     file3= f'{folder}data/processed/{ftr_name}/spatial/BP4_4_spatial_350_spatial.txt'
-    wl_mn3, wl_mx3= 200, 500
+    wl_mn3, wl_mx3= 331.3, 500
     multiplotter (ftr_name, [np.loadtxt(file1, skiprows=1), np.loadtxt(file2, skiprows=1), np.loadtxt(file3, skiprows=1)], 
                   [wl_mn1, wl_mn2, wl_mn3], [wl_mx1, wl_mx2, wl_mx3], save_plot)

@@ -85,7 +85,7 @@ def integrate(fill_ib, fill_oob_r, fill_oob_b):
         oob_blue_percent= oob_blue_integrate*100/ib_integrate
     else:
         oob_blue_percent= -200
-    print(f"{filt_name}\t |oob_b% {round(oob_blue_percent,2)}\t |oob_r% {round(oob_red_percent,2)}")
+    print(f"{filt_name}\t |oob_b% {(oob_blue_percent):.2e}\t |oob_r% {(oob_red_percent):.2e}")
     
 def wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, oob_limit, fill_range, cent=None):
     fill_ib, fill_oob_r, fill_oob_b= fill_interval(tx_ib_plt, fill_range, cent), fill_interval(tx_oob_r_plt, fill_range), fill_interval(tx_oob_b_plt, fill_range) 
@@ -94,7 +94,7 @@ def wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, oob_limit, fill_range, cent=N
 
 
 if __name__=='__main__':
-    SHOW, SAVE=False, True
+    SHOW, SAVE=True, True
     project_path= os.path.expanduser('~/Dropbox/Janmejoy_SUIT_Dropbox/science_filter_characterization/science_filter_charactrerization_scripts/science_filter_plots_project/') 
     folder= os.path.join(project_path, 'data/processed/')
     print("OOB %tx wrt IB")

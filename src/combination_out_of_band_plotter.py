@@ -56,7 +56,7 @@ def integrate(fill_ib, fill_oob_r, fill_oob_b):
         oob_blue_percent= oob_blue_integrate*100/ib_integrate
     else:
         oob_blue_percent= -200
-    print(f"{filt_name}\t |oob_b% {round(oob_blue_percent,4)}\t |oob_r% {round(oob_red_percent,4)}")
+    print(f"{filt_name}\t |oob_b% {(oob_blue_percent):.2e}\t |oob_r% {(oob_red_percent):.2e}")
 
 def combined(FILT1, FILT2, lamda1, lamda2, fill_width, cent=None):
     '''
@@ -109,7 +109,7 @@ def combined(FILT1, FILT2, lamda1, lamda2, fill_width, cent=None):
         if SHOW: plt.show()
 
 if __name__=='__main__':
-    SHOW, SAVE= False, True
+    SHOW, SAVE= False, False
     project_path= os.path.expanduser('~/Dropbox/Janmejoy_SUIT_Dropbox/science_filter_characterization/science_filter_charactrerization_scripts/science_filter_plots_project/') 
     folder= os.path.join(project_path, 'data/processed/')
     print("OOB %tx wrt IB")

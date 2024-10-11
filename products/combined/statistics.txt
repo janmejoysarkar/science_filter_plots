@@ -1,15 +1,15 @@
 Statistics for Filter combination bandpasses.
-Generated on Sep 2666666, 2024.
+Generated on 2024-10-11
 Generated from relative transmission curves.
 
 OOB %tx wrt IB
-NB01     |oob_b% 0.2861  |oob_r% 1.663
-NB02     |oob_b% 0.0     |oob_r% 0.0013
-NB03     |oob_b% 0.0312  |oob_r% 0.0473
-NB04     |oob_b% 0.0306  |oob_r% 0.0243
-NB05     |oob_b% 0.0045  |oob_r% 0.0
-NB06     |oob_b% 0.0001  |oob_r% 0.0104
-NB07     |oob_b% 0.0107  |oob_r% 0.0071
-BB01     |oob_b% 2.3489  |oob_r% 0.0013
-BB03     |oob_b% 0.0945  |oob_r% 0.0008
-BB02     |oob_b% -200    |oob_r% 0.0722
+NB01     |oob_b% 2.86e-01        |oob_r% 1.66e+00
+NB02     |oob_b% 4.80e-05        |oob_r% 1.33e-03
+NB03     |oob_b% 3.12e-02        |oob_r% 4.73e-02
+NB04     |oob_b% 3.06e-02        |oob_r% 2.43e-02
+NB05     |oob_b% 4.53e-03        |oob_r% 5.54e-06
+NB06     |oob_b% 8.38e-05        |oob_r% 1.04e-02
+NB07     |oob_b% 1.07e-02        |oob_r% 7.09e-03
+BB01     |oob_b% 2.35e+00        |oob_r% 1.28e-03
+BB03     |oob_b% 9.45e-02        |oob_r% 8.14e-04
+BB02     |oob_b% -2.00e+02       |oob_r% 7.22e-02

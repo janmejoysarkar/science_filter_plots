@@ -1,5 +1,7 @@
 ![Logo](https://suit.iucaa.in/sites/default/files/top_banner_compressed_2_1.png)
 
+The `exp_tx` branch is made to express the tables and the plots in exponential format.
+
 # Science filter profiles
 
 Repository maintained to create SUIT science filter transmission profiles from ascii files of recorded lab data.
