@@ -100,7 +100,7 @@ if __name__=='__main__':
     print("OOB %tx wrt IB")
 
     ## NB1_2 ##
-    filt_name="NB01_2"
+    filt_name="NB01"
     oob_blue=np.loadtxt(folder+'NB01/oob/NB1_2_oob_blue_oob.txt', skiprows=1, usecols= (0,1))
     oob_red=np.loadtxt(folder+'NB01/oob/NB1_2_oob_red_oob.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'NB01/oob/NB1_2_inband_inband.txt', skiprows=1, usecols=(0,1))
@@ -108,7 +108,7 @@ if __name__=='__main__':
     wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 1e-4, 5, 214)
 
     ## BB3_3 ##
-    filt_name="BB03_3"
+    filt_name="BB03"
     oob_blue=np.loadtxt(folder+'BB03/oob/BB3_3_oob_299nm_oob.txt', skiprows=1, usecols= (0,1))
     oob_red=np.loadtxt(folder+'BB03/oob/BB3_3_oob_380nm_oob.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'BB03/oob/BB3_3_spatial_inband.txt', skiprows=1, usecols=(0,1))
@@ -116,7 +116,7 @@ if __name__=='__main__':
     wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 1e-4, 5)
 
     ## BB2_3 ##
-    filt_name="BB02_3"
+    filt_name="BB02"
     ib1= np.loadtxt(folder+'BB02/oob/BB2_3_spatial_255nm_inband.txt', skiprows=1, usecols= (0,1))
     ib2= np.loadtxt(folder+'BB02/oob/BB2_3_spatial_290nm_inband.txt', skiprows=1, usecols= (0,1))
     ib2=ib2[np.logical_not(ib2[:,0]<276.8)]
@@ -127,7 +127,7 @@ if __name__=='__main__':
     wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 1e-4, 5)
 
     ## BB1_3 ##
-    filt_name="BB01_3"
+    filt_name="BB01"
     oob_blue=np.loadtxt(folder+'BB01/oob/BB1_3_oob_190_oob.txt', skiprows=1, usecols= (0,1))
     oob_red=np.loadtxt(folder+'BB01/oob/BB1_3_oob_262.5_oob.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'BB01/oob/BB1_3_spatial_inband.txt', skiprows=1, usecols=(0,1))
@@ -135,7 +135,7 @@ if __name__=='__main__':
     wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 1e-4, 5)
 
     ## BP2_6 ##
-    filt_name= "BP02_6"
+    filt_name= "BP02"
     oob_blue=np.loadtxt(folder+'BP02/oob/BP2_8_252-272_OOB_oob.txt', skiprows=1, usecols= (0,1))
     oob_red=np.loadtxt(folder+'BP02/oob/BP2_8_290-310_OOB_oob.txt', skiprows=1, usecols= (0,1))
     ib1= np.loadtxt(folder+'BP02/oob/BP2_8_262-282_inband.txt', skiprows=1, usecols= (0,1))
@@ -145,7 +145,7 @@ if __name__=='__main__':
     wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 1e-4, 5)
     
     ## BP4_2 ##
-    filt_name="BP04_2"
+    filt_name="BP04"
     ib1= np.loadtxt(folder+'BP04/oob/BP4_2_280_inband.txt', skiprows=1, usecols= (0,1))
     ib2= np.loadtxt(folder+'BP04/oob/BP4_2_320_inband.txt', skiprows=1, usecols= (0,1))
     ib3= np.loadtxt(folder+'BP04/oob/BP4_2_360_inband.txt', skiprows=1, usecols= (0,1))
@@ -156,7 +156,7 @@ if __name__=='__main__':
     wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 1e-5, 5)
     
     ## BP3_2 ##
-    filt_name="BP03_2"
+    filt_name="BP03"
     ib1= np.loadtxt(folder+'BP03/oob/BP3_2_spatial_310_inband.txt', skiprows=1, usecols= (0,1))
     ib2= np.loadtxt(folder+'BP03/oob/BP3_2_spatial_350_inband.txt', skiprows=1, usecols= (0,1))
     ib3= np.loadtxt(folder+'BP03/oob/BP3_2_spatial_390_inband.txt', skiprows=1, usecols= (0,1))
@@ -167,42 +167,42 @@ if __name__=='__main__':
     wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 1e-5, 5)
 
     ## NB7_2 ##
-    filt_name="NB07_2"
+    filt_name="NB07"
     oob=np.loadtxt(folder+'NB07/oob/NB7_2_oob.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'NB07/oob/NB7_2_inband.txt', skiprows=1, usecols=(0,1))
     tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt= tx_gen(oob, oob, ib, 384, 392, 255, 420)
     wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 1e-4, 1, 388)
 
     ## NB6_1 ##
-    filt_name="NB06_1"
+    filt_name="NB06"
     oob=np.loadtxt(folder+'NB06/oob/NB6_1_oob.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'NB06/oob/NB6_1_inband.txt', skiprows=1, usecols=(0,1))
     tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt= tx_gen(oob, oob, ib, 296, 303, 255, 400)
     wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 1e-4, 1, 300)
 
     ## NB5_3 ##
-    filt_name="NB05_3"
+    filt_name="NB05"
     oob=np.loadtxt(folder+'NB05/oob/NB5_3_oob.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'NB05/oob/NB5_3_inband.txt', skiprows=1, usecols=(0,1))
     tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt= tx_gen(oob, oob, ib, 280, 286, 250, 400)
     wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 1e-4, 1, 283.54)
 
     ## NB4_2 ##
-    filt_name="NB04_2"
+    filt_name="NB04"
     oob=np.loadtxt(folder+'NB04/oob/NB4_2_oob.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'NB04/oob/NB4_2_inband.txt', skiprows=1, usecols=(0,1))
     tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt= tx_gen(oob, oob, ib, 278, 283, 250, 400)
     wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 1e-4, 1, 280.75)
 
     ## NB3_2 ##
-    filt_name="NB03_2"
+    filt_name="NB03"
     oob=np.loadtxt(folder+'NB03/oob/NB3_2_oob.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'NB03/oob/NB3_2_inband.txt', skiprows=1, usecols=(0,1))
     tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt= tx_gen(oob, oob, ib, 278, 282, 255, 400)
     wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 1e-4, 1, 280.05)
 
     ## NB2A_7 ##
-    filt_name="NB02A_7"
+    filt_name="NB02"
     oob=np.loadtxt(folder+'NB02/oob/NB2A_7_oob.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'NB02/oob/NB2A_7_inband.txt', skiprows=1, usecols=(0,1))
     tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt= tx_gen(oob, oob, ib, 275, 279, 255, 400)
