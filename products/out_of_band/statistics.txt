@@ -1,10 +1,11 @@
-Generated on 2024-10-11
+Generated on 2024-11-19
 Generated from relative transmission data.
 OOB %tx wrt IB
 NB01_2   |oob_b% 2.32e+00        |oob_r% 5.44e+00
 BB03_3   |oob_b% 1.09e-01        |oob_r% 3.08e-01
 BB02_3   |oob_b% 8.62e-01        |oob_r% 4.85e-02
-BB01_3   |oob_b% 1.34e+01        |oob_r% 3.41e-01
+BB01_FW2         |oob_b% 1.34e+01       |oob_r% 3.41e-01
+BB01_FW1         |oob_b% 7.66e+00       |oob_r% 7.86e-01
 BP02_6   |oob_b% 8.65e-02        |oob_r% 2.65e-02
 BP04_2   |oob_b% -2.00e+02       |oob_r% 1.61e-01
 BP03_2   |oob_b% 3.23e-01        |oob_r% 2.26e-01

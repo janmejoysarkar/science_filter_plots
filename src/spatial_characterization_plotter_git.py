@@ -157,28 +157,28 @@ if __name__=='__main__':
     deviation(ftr_name, np.loadtxt(file, skiprows=1),  wl_mn, wl_mx)
     
     # NB8_2 #
-    ftr_name= "NB08"
-    file= f'{folder}data/processed/{ftr_name}/spatial/NB8_2_1200lpmm_500blaze_spatial.txt' 
+    ftr_name= "NB08_FW1"
+    file= f'{folder}data/processed/{ftr_name[:4]}/spatial/NB8_2_1200lpmm_500blaze_spatial.txt' 
     wl_mn, wl_mx= 396.4, 397.3
     plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot)
     deviation(ftr_name, np.loadtxt(file, skiprows=1),  wl_mn, wl_mx)
     
     # NB8_1 #
-    ftr_name= "NB08"
-    file= f'{folder}data/processed/{ftr_name}/spatial/NB8_1_spatial.txt' 
+    ftr_name= "NB08_FW2"
+    file= f'{folder}data/processed/{ftr_name[:4]}/spatial/NB8_1_spatial.txt' 
     wl_mn, wl_mx= 396.4, 397.3
     plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot)
     deviation(ftr_name, np.loadtxt(file, skiprows=1),  wl_mn, wl_mx)
         
     # BB1_5 #
-    ftr_name= "BB01"
-    file= f'{folder}data/processed/{ftr_name}/spatial/BB1_5_inband_spatial.txt' 
+    ftr_name= "BB01_FW1"
+    file= f'{folder}data/processed/{ftr_name[:4]}/spatial/BB1_5_inband_spatial.txt' 
     wl_mn, wl_mx= 100, 400
     plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot)
     
     # BB1_3 #
-    ftr_name= "BB01"
-    file= f'{folder}data/processed/{ftr_name}/spatial/BB1_3_spatial_spatial.txt' 
+    ftr_name= "BB01_FW2"
+    file= f'{folder}data/processed/{ftr_name[:4]}/spatial/BB1_3_spatial_spatial.txt' 
     wl_mn, wl_mx= 100, 400
     plotter(ftr_name, np.loadtxt(file, skiprows=1), wl_mn, wl_mx, save_plot)
     

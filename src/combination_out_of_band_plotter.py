@@ -109,7 +109,7 @@ def combined(FILT1, FILT2, lamda1, lamda2, fill_width, cent=None):
         if SHOW: plt.show()
 
 if __name__=='__main__':
-    SHOW, SAVE= False, False
+    SHOW, SAVE= True, True
     project_path= os.path.expanduser('~/Dropbox/Janmejoy_SUIT_Dropbox/science_filter_characterization/science_filter_charactrerization_scripts/science_filter_plots_project/') 
     folder= os.path.join(project_path, 'data/processed/')
     print("OOB %tx wrt IB")
@@ -121,12 +121,19 @@ if __name__=='__main__':
     ib= np.loadtxt(folder+'NB01/oob/NB1_2_inband_inband.txt', skiprows=1, usecols=(0,1))
     NB01= tx_gen(oob_blue, oob_red, ib, 205, 230, 190, 400)
     
+    ## BB1_5 ##
+    filt_name="BB01_FW1"
+    oob_blue=np.loadtxt(folder+'BB01/oob/BB1_5_oob_blue_oob.txt', skiprows=1, usecols= (0,1))
+    oob_red=np.loadtxt(folder+'BB01/oob/BB1_5_oob_red_oob.txt', skiprows=1, usecols= (0,1))
+    ib= np.loadtxt(folder+'BB01/oob/BB1_5_inband_inband.txt', skiprows=1, usecols=(0,1))
+    BB01_FW1= tx_gen(oob_blue, oob_red, ib, 210, 245, 190, 300)
+    
     ## BB1_3 ##
     filt_name="BB01_3"
     oob_blue=np.loadtxt(folder+'BB01/oob/BB1_3_oob_190_oob.txt', skiprows=1, usecols= (0,1))
     oob_red=np.loadtxt(folder+'BB01/oob/BB1_3_oob_262.5_oob.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'BB01/oob/BB1_3_spatial_inband.txt', skiprows=1, usecols=(0,1))
-    BB01= tx_gen(oob_blue, oob_red, ib, 210, 245, 190, 300)
+    BB01_FW2= tx_gen(oob_blue, oob_red, ib, 210, 245, 190, 300)
 
     ## BB3_3 ##
     filt_name="BB03_3"
@@ -144,13 +151,6 @@ if __name__=='__main__':
     oob_blue=np.loadtxt(folder+'BB02/oob/BB2_3_oob_229nm_oob.txt', skiprows=1, usecols= (0,1))
     oob_red=np.loadtxt(folder+'BB02/oob/BB2_3_oob_323nm_oob.txt', skiprows=1, usecols= (0,1))
     BB02= tx_gen(oob_blue, oob_red, ib, 245, 304, 190, 400)
-
-    ## BB1_3 ##
-    filt_name="BB01_3"
-    oob_blue=np.loadtxt(folder+'BB01/oob/BB1_3_oob_190_oob.txt', skiprows=1, usecols= (0,1))
-    oob_red=np.loadtxt(folder+'BB01/oob/BB1_3_oob_262.5_oob.txt', skiprows=1, usecols= (0,1))
-    ib= np.loadtxt(folder+'BB01/oob/BB1_3_spatial_inband.txt', skiprows=1, usecols=(0,1))
-    BB01= tx_gen(oob_blue, oob_red, ib, 210, 245, 190, 300)
 
     ## BP2_6 ##
     filt_name= "BP02_6"
@@ -218,14 +218,14 @@ if __name__=='__main__':
     NB02= tx_gen(oob, oob, ib, 275, 279, 255, 400)
    
     #Combined Plots
-    filt_name="NB01"; combined(NB01, BB01, int(NB01[1][0][0])+1, int(NB01[2][-1][0]), 5, 214)
+    filt_name="NB01"; combined(NB01, BB01_FW1, int(NB01[1][0][0])+1, int(NB01[2][-1][0]), 5, 214)
     filt_name="NB02"; combined(NB02, BP02, int(NB02[1][0][0])+1, int(NB02[2][-1][0]), 1, 277)
     filt_name="NB03"; combined(NB03, BP02, int(NB03[1][0][0])+1, int(NB03[2][-1][0]), 1, 280.05)
     filt_name="NB04"; combined(NB04, BP02, int(NB04[1][0][0])+1, int(NB04[2][-1][0]), 1, 280.75)
     filt_name="NB05"; combined(NB05, BP02, int(NB05[1][0][0])+1, int(NB05[2][-1][0]), 1, 283.54)
     filt_name="NB06"; combined(NB06, BP03, int(NB06[1][0][0])+1, int(NB06[2][-1][0]), 1, 300)
     filt_name="NB07"; combined(NB07, BP03, int(NB07[1][0][0])+1, int(NB07[2][-1][0]), 1, 388)
-    filt_name="BB01"; combined(BB01, BB01, int(BB01[1][0][0])+1, int(BB01[2][-1][0]), 5, BB01[0][int(len(BB01[0])/2)][0])
+    filt_name="BB01"; combined(BB01_FW1, BB01_FW2, int(BB01_FW1[1][0][0])+1, int(BB01_FW1[2][-1][0]), 5, BB01_FW1[0][int(len(BB01_FW1[0])/2)][0])
     filt_name="BB03"; combined(BB03, BP04, 293, int(BB03[2][-1][0]), 5, BB03[0][int(len(BB03[0])/2)][0])
     #BB02 is a special case as the blue end of the BB02 ib and oob_b spectra does not have
     #any overlap with the available BP04 spectra. Therefore, the central ib wl is forcefully

@@ -127,10 +127,18 @@ if __name__=='__main__':
     wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 1e-4, 5)
 
     ## BB1_3 ##
-    filt_name="BB01"
+    filt_name="BB01_FW2"
     oob_blue=np.loadtxt(folder+'BB01/oob/BB1_3_oob_190_oob.txt', skiprows=1, usecols= (0,1))
     oob_red=np.loadtxt(folder+'BB01/oob/BB1_3_oob_262.5_oob.txt', skiprows=1, usecols= (0,1))
     ib= np.loadtxt(folder+'BB01/oob/BB1_3_spatial_inband.txt', skiprows=1, usecols=(0,1))
+    tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt= tx_gen(oob_blue, oob_red, ib, 210, 245, 190, 300)
+    wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 1e-4, 5)
+
+    ## BB1_5 ##
+    filt_name="BB01_FW1"
+    oob_blue=np.loadtxt(folder+'BB01/oob/BB1_5_oob_blue_oob.txt', skiprows=1, usecols= (0,1))
+    oob_red=np.loadtxt(folder+'BB01/oob/BB1_5_oob_red_oob.txt', skiprows=1, usecols= (0,1))
+    ib= np.loadtxt(folder+'BB01/oob/BB1_5_inband_inband.txt', skiprows=1, usecols=(0,1))
     tx_ib_plt, tx_oob_b_plt, tx_oob_r_plt= tx_gen(oob_blue, oob_red, ib, 210, 245, 190, 300)
     wrapper(tx_ib_plt, tx_oob_r_plt, tx_oob_b_plt, 1e-4, 5)
 
